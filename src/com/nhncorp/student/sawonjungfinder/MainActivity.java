@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -34,19 +33,6 @@ public class MainActivity extends Activity {
 	private Boolean isregistartionClicked = false;
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
-		if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_BACK:
-				dbClose();
-				this.finish();
-
-			}
-		}
-		return false;
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -74,13 +60,12 @@ public class MainActivity extends Activity {
 	private void dbMake() {
 		mDbOpenHelper = new DbOpenHelper(this);
 		mDbOpenHelper.open();
-	}
-
-	private void dbClose() {
 		mDbOpenHelper.close();
 	}
 
 	private void getData() {
+		mDbOpenHelper = new DbOpenHelper(this);
+		mDbOpenHelper.open();
 		Cursor mCursor = mDbOpenHelper.getAll();
 		// 모든 row를 받아옴
 		mCursor.moveToFirst();
@@ -151,8 +136,9 @@ public class MainActivity extends Activity {
 			}
 
 		}
+		mDbOpenHelper.close();
 		// 앱 시작할 때 service 시작
-		//setService();
+		setService();
 
 	}
 
@@ -176,8 +162,7 @@ public class MainActivity extends Activity {
 						RegistrationActivity.class);
 				startActivity(intent);
 				isregistartionClicked = true;
-				//setService();
-				dbClose();
+				setService();
 				MainActivity.this.finish();
 
 			}
@@ -210,8 +195,8 @@ public class MainActivity extends Activity {
 	}
 
 	private void setService() {
-		Intent intent = new Intent(this, AlarmService.class);
 		getData();
+		Intent intent = new Intent(this, AlarmService.class);
 		if (Constants.ALARM_STATE.equals("1")
 				|| Constants.DEVICE_STATE.equals("1")) { // alarm is turned on
 			startService(intent);
@@ -222,5 +207,6 @@ public class MainActivity extends Activity {
 			stopService(intent);
 			isregistartionClicked = false;
 		}
+		mDbOpenHelper.close();
 	}
 }

@@ -74,12 +74,19 @@ public class AlarmService extends Service {
 
 	@Override
 	public void onDestroy() {
+		mDbOpenHelper = new DbOpenHelper(getApplicationContext());
+		mDbOpenHelper.open();
+		getData();
 		System.out.println("=================stop service====================");
 		super.onDestroy();
-		centralManager.stopScanning();
-		mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-				Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
-				Constants.DEVICE_STATE, "0");
+		if (Constants.ALARM_STATE.equals("0")
+				&& Constants.DEVICE_STATE.equals("0")) {
+			centralManager.stopScanning();
+			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+					Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+					Constants.DEVICE_STATE, "0");
+		}
+		mDbOpenHelper.close();
 	}
 
 	private void setCentralManager() {
