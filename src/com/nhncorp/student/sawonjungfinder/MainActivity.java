@@ -160,10 +160,11 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this,
 						RegistrationActivity.class);
-				startActivity(intent);
+				
 				isregistartionClicked = true;
 				setService();
 				MainActivity.this.finish();
+				startActivity(intent);
 
 			}
 		});
@@ -197,13 +198,14 @@ public class MainActivity extends Activity {
 	private void setService() {
 		getData();
 		Intent intent = new Intent(this, AlarmService.class);
-		if (Constants.ALARM_STATE.equals("1")
-				|| Constants.DEVICE_STATE.equals("1")) { // alarm is turned on
+		if ((Constants.ALARM_STATE.equals("1")
+				|| Constants.DEVICE_STATE.equals("1")) && !isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("0")) { // alarm is turned on
 			startService(intent);
-		} else {
+		} else if(!isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("1") && Constants.ALARM_STATE.equals("0")
+				&& Constants.DEVICE_STATE.equals("0")){
 			stopService(intent);
 		}
-		if (isregistartionClicked) { // alarm is turned off
+		if (isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("1")) { // alarm is turned off
 			stopService(intent);
 			isregistartionClicked = false;
 		}

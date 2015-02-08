@@ -33,21 +33,22 @@ public class AlarmService extends Service {
 
 	private DbOpenHelper mDbOpenHelper;
 
+	private Boolean isCreated = false;
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+	public void onCreate() {
+		super.onCreate();
 
 		mDbOpenHelper = new DbOpenHelper(getApplicationContext());
 		mDbOpenHelper.open();
 
-		super.onStartCommand(intent, flags, startId);
-
 		getData();
-		System.out.println("======================getData()================");
+		System.out.println("======================getData()1================");
 
 		if (Constants.ALARM_STATE.equals("1")
 				&& Constants.PERIPHERAL_ONOFF.equals("0")) {
@@ -68,7 +69,46 @@ public class AlarmService extends Service {
 					.println("=====================start device service========="
 							+ Constants.DEVICE_NAME + "===================");
 		}
+		isCreated = true;
 		mDbOpenHelper.close();
+
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (!isCreated) {
+			mDbOpenHelper = new DbOpenHelper(getApplicationContext());
+			mDbOpenHelper.open();
+
+			super.onStartCommand(intent, flags, startId);
+
+			getData();
+			System.out
+					.println("======================getData()2================");
+
+			if (Constants.ALARM_STATE.equals("1")) {
+				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+						Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+						Constants.DEVICE_STATE, "1");
+				setCentralManager();
+				System.out
+						.println("=====================start alarm service========="
+								+ Constants.DEVICE_NAME + "===================");
+			} else if (Constants.DEVICE_STATE.equals("1")) {
+				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+						Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+						Constants.DEVICE_STATE, "1");
+				setCentralManager();
+				System.out
+						.println("=====================start device service========="
+								+ Constants.DEVICE_NAME + "===================");
+			}
+			mDbOpenHelper.close();
+			
+			return START_STICKY;
+
+		}
+		isCreated = false;
 		return START_STICKY;
 	}
 
@@ -79,8 +119,7 @@ public class AlarmService extends Service {
 		getData();
 		System.out.println("=================stop service====================");
 		super.onDestroy();
-		if (Constants.ALARM_STATE.equals("0")
-				&& Constants.DEVICE_STATE.equals("0")) {
+		if (Constants.PERIPHERAL_ONOFF.equals("1")) {
 			centralManager.stopScanning();
 			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
 					Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
