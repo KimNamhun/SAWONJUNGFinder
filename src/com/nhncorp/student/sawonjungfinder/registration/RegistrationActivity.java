@@ -76,11 +76,12 @@ public class RegistrationActivity extends Activity {
 				mDbOpenHelper.open();
 				mDbOpenHelper.updateColumn(1, cardNamingEdit.getText()
 						.toString(), peripheralValue.getBDAddress(), "1", "1",
-						"1"); // id,
+						"0"); // id,
 				// name,
 				// address,
 				// alarm,
 				// devOnOff
+				// peripheralonoff
 				Cursor mCursor = mDbOpenHelper.getMatchName(cardNamingEdit
 						.getText().toString()); // test
 				mCursor.moveToFirst(); // test
@@ -146,6 +147,7 @@ public class RegistrationActivity extends Activity {
 
 		} else if (registrationState == true) {
 			centralManager.stopScanning();
+			registrationState = false;
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
