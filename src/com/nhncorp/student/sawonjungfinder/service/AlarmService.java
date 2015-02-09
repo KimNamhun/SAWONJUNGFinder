@@ -137,7 +137,7 @@ public class AlarmService extends Service {
 			setAlarm = 1;
 		}
 
-		if (distance > 15 && setAlarm == 1) { // distance 값의 조절이 필요함
+		if (distance > 18 && setAlarm == 1) { // distance 값의 조절이 필요함
 			notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			notification = new Notification.Builder(getApplicationContext())
 					.setContentTitle("사원증이 멀어졌습니다.")
