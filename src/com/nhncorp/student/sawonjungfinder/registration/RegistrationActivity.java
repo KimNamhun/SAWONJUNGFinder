@@ -75,7 +75,7 @@ public class RegistrationActivity extends Activity {
 				mDbOpenHelper = new DbOpenHelper(RegistrationActivity.this);
 				mDbOpenHelper.open();
 				mDbOpenHelper.updateColumn(1, cardNamingEdit.getText()
-						.toString(), peripheralValue.getBDAddress(), "1", "0",
+						.toString(), peripheralValue.getBDAddress(), "0", "0",
 						"0"); // id,
 				// name,
 				// address,

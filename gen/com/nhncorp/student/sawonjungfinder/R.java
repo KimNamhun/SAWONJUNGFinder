@@ -22,19 +22,20 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int card_black=0x7f020000;
-        public static final int card_icon=0x7f020001;
-        public static final int card_orange=0x7f020002;
-        public static final int finder_black=0x7f020003;
-        public static final int finder_icon=0x7f020004;
-        public static final int finder_orange=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int main_icon=0x7f020007;
-        public static final int power_black=0x7f020008;
-        public static final int power_orange=0x7f020009;
-        public static final int question_black=0x7f02000a;
-        public static final int question_icon=0x7f02000b;
-        public static final int question_orange=0x7f02000c;
+        public static final int alarm_icon=0x7f020000;
+        public static final int card_black=0x7f020001;
+        public static final int card_icon=0x7f020002;
+        public static final int card_orange=0x7f020003;
+        public static final int finder_black=0x7f020004;
+        public static final int finder_icon=0x7f020005;
+        public static final int finder_orange=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int main_icon=0x7f020008;
+        public static final int power_black=0x7f020009;
+        public static final int power_orange=0x7f02000a;
+        public static final int question_black=0x7f02000b;
+        public static final int question_icon=0x7f02000c;
+        public static final int question_orange=0x7f02000d;
     }
     public static final class id {
         public static final int action_settings=0x7f09000c;

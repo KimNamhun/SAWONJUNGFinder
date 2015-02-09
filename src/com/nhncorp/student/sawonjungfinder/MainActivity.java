@@ -15,6 +15,7 @@ import com.nhncorp.student.sawonjungfinder.constants.Constants;
 import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
 import com.nhncorp.student.sawonjungfinder.finder.FinderActivity;
 import com.nhncorp.student.sawonjungfinder.registration.RegistrationActivity;
+import com.nhncorp.student.sawonjungfinder.service.AlarmService;
 
 public class MainActivity extends Activity {
 
@@ -92,12 +93,14 @@ public class MainActivity extends Activity {
 						Constants.LATITUDE);
 				devOnOffBtn.setImageResource(R.drawable.power_orange);
 				System.out.println("po"); // ///////////////////////
+				setService(1); // start
 			} else if (Constants.DEVICE_STATE.equals("1")) {
 				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
 						Constants.DEVICE_ADDRESS, "0", Constants.LONGITUDE,
 						Constants.LATITUDE);
 				devOnOffBtn.setImageResource(R.drawable.power_black);
 				System.out.println("pb"); // ///////////////////////
+				setService(0); // stop
 			}
 		} else if (sel == 1) { // 아무일도 하지 않음
 			if (Constants.DEVICE_STATE.equals("0")) {
@@ -109,6 +112,8 @@ public class MainActivity extends Activity {
 			}
 
 		}
+		mDbOpenHelper.close();
+		getData(); // set
 		mDbOpenHelper.close();
 	}
 
@@ -128,12 +133,16 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this,
-						RegistrationActivity.class);
-				// setService();
-				MainActivity.this.finish();
-				startActivity(intent);
-
+				if (Constants.DEVICE_STATE.equals("1")) {
+					Toast.makeText(MainActivity.this,
+							"기기를 등록하려면 전구의 불이 꺼져야 합니다.", Toast.LENGTH_LONG)
+							.show();
+				} else {
+					Intent intent = new Intent(MainActivity.this,
+							RegistrationActivity.class);
+					MainActivity.this.finish();
+					startActivity(intent);
+				}
 			}
 		});
 		devOnOffBtn.setOnClickListener(new View.OnClickListener() {
@@ -154,24 +163,12 @@ public class MainActivity extends Activity {
 		devOnOffBtn = (ImageButton) findViewById(R.id.devOnOffBtn);
 	}
 
-	// private void setService() {
-	// getData();
-	// Intent intent = new Intent(this, AlarmService.class);
-	// if ((Constants.ALARM_STATE.equals("1")
-	// || Constants.DEVICE_STATE.equals("1")) && !isregistartionClicked &&
-	// Constants.PERIPHERAL_ONOFF.equals("0")) { // alarm is turned on
-	// startService(intent);
-	// } else if(!isregistartionClicked &&
-	// Constants.PERIPHERAL_ONOFF.equals("1") &&
-	// Constants.ALARM_STATE.equals("0")
-	// && Constants.DEVICE_STATE.equals("0")){
-	// stopService(intent);
-	// }
-	// if (isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("1")) { //
-	// alarm is turned off
-	// stopService(intent);
-	// isregistartionClicked = false;
-	// }
-	// mDbOpenHelper.close();
-	// }
+	private void setService(int i) {
+		Intent intent = new Intent(this, AlarmService.class);
+		if (i == 0) { // stop
+			stopService(intent);
+		} else if (i == 1) { // start
+			startService(intent);
+		}
+	}
 }
