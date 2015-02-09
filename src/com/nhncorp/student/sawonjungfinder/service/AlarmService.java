@@ -1,5 +1,7 @@
 package com.nhncorp.student.sawonjungfinder.service;
 
+import java.util.ArrayList;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,6 +36,13 @@ public class AlarmService extends Service {
 	private DbOpenHelper mDbOpenHelper;
 
 	private int notifycount = 0;
+
+	ArrayList<Double> valueArr = new ArrayList<Double>();
+
+	private int sumCount = 0;
+	private int sum = 0;
+
+	private int setAlarm = 0;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -71,7 +80,33 @@ public class AlarmService extends Service {
 					runOnUiThread(new Runnable() {
 						public void run() {
 
-							setNotification(peripheral.getDistance());
+							// 거리 수신값 최적화
+							valueArr.add(peripheral.getDistance());
+							sumCount = sumCount + 1;
+							sum += peripheral.getDistance();
+							if (sumCount == 10) {
+								int avg = sum / 10;
+								for (int i = 0; i < valueArr.size(); i++) {
+									if (valueArr.get(i) > avg + 3
+											|| valueArr.get(i) < avg - 3)
+										valueArr.remove(i);
+								}
+								sum = 0;
+								for (int i = 0; i < valueArr.size(); i++) {
+									sum += valueArr.get(i);
+								}
+								avg = sum / valueArr.size(); // 환산된 avg
+
+								sumCount = 5;
+								sum = avg * 5;
+								valueArr.clear();
+								for (int i = 0; i < 5; i++) {
+									valueArr.add((double) avg);
+								}
+
+								setNotification(avg);
+							}
+
 							System.out
 									.println("notification================================");
 						}
@@ -92,7 +127,11 @@ public class AlarmService extends Service {
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
 				intent, 0);
 
-		if (distance > 20) { // distance 값의 조절이 필요함
+		if (distance < 9 && distance > 3) {
+			setAlarm = 1;
+		}
+
+		if (distance > 15 && setAlarm == 1) { // distance 값의 조절이 필요함
 			notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			notification = new Notification.Builder(getApplicationContext())
 					.setContentTitle("사원증이 멀어졌습니다.")
@@ -107,6 +146,7 @@ public class AlarmService extends Service {
 			// vibrate setting
 			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(1000);
+			setAlarm = 0;
 		}
 
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
