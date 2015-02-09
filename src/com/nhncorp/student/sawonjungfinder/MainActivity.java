@@ -15,7 +15,6 @@ import com.nhncorp.student.sawonjungfinder.constants.Constants;
 import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
 import com.nhncorp.student.sawonjungfinder.finder.FinderActivity;
 import com.nhncorp.student.sawonjungfinder.registration.RegistrationActivity;
-import com.nhncorp.student.sawonjungfinder.service.AlarmService;
 
 public class MainActivity extends Activity {
 
@@ -25,12 +24,9 @@ public class MainActivity extends Activity {
 
 	private ImageButton finderBtn;
 	private ImageButton registrationBtn;
-	private ImageButton timeBtn;
 	private ImageButton devOnOffBtn;
 
 	private DbOpenHelper mDbOpenHelper;
-
-	private Boolean isregistartionClicked = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,7 @@ public class MainActivity extends Activity {
 		}
 
 		dbMake();
-		deviceConfirm(0); // nothing
+		deviceConfirm(1); // nothing
 		deviceNameText.setText(Constants.DEVICE_NAME);
 		addListener();
 	}
@@ -77,56 +73,33 @@ public class MainActivity extends Activity {
 				.getColumnIndex("name"));
 		Constants.DEVICE_ADDRESS = mCursor.getString(mCursor
 				.getColumnIndex("macaddress"));
-		Constants.ALARM_STATE = mCursor.getString(mCursor
-				.getColumnIndex("alarmstate"));
 		Constants.DEVICE_STATE = mCursor.getString(mCursor
 				.getColumnIndex("devicestate"));
-		Constants.PERIPHERAL_ONOFF = mCursor.getString(mCursor
-				.getColumnIndex("peripheralonoff"));
+		Constants.LONGITUDE = mCursor.getString(mCursor
+				.getColumnIndex("longitude"));
+		Constants.LATITUDE = mCursor.getString(mCursor
+				.getColumnIndex("latitude"));
 	}
 
-	private void deviceConfirm(int sel) { // 1: time 2: dev
+	private void deviceConfirm(int sel) { // 1: nothing 2: dev
 		getData();
 
 		if (sel == 2) { // dev버튼을 누른 경우 devicestate의 값을 변경
 
 			if (Constants.DEVICE_STATE.equals("0")) {
 				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-						Constants.DEVICE_ADDRESS, Constants.ALARM_STATE, "1",
-						Constants.PERIPHERAL_ONOFF);
+						Constants.DEVICE_ADDRESS, "1", Constants.LONGITUDE,
+						Constants.LATITUDE);
 				devOnOffBtn.setImageResource(R.drawable.power_orange);
 				System.out.println("po"); // ///////////////////////
 			} else if (Constants.DEVICE_STATE.equals("1")) {
 				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-						Constants.DEVICE_ADDRESS, Constants.ALARM_STATE, "0",
-						Constants.PERIPHERAL_ONOFF);
+						Constants.DEVICE_ADDRESS, "0", Constants.LONGITUDE,
+						Constants.LATITUDE);
 				devOnOffBtn.setImageResource(R.drawable.power_black);
 				System.out.println("pb"); // ///////////////////////
 			}
-		} else if (sel == 1) { // time버튼을 누른 경우 alarmstate의 값을 변경
-
-			if (Constants.ALARM_STATE.equals("0")) {
-				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-						Constants.DEVICE_ADDRESS, "1", Constants.DEVICE_STATE,
-						Constants.PERIPHERAL_ONOFF);
-				timeBtn.setImageResource(R.drawable.time_orange);
-				System.out.println("to"); // ///////////////////////
-			} else if (Constants.ALARM_STATE.equals("1")) {
-				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-						Constants.DEVICE_ADDRESS, "0", Constants.DEVICE_STATE,
-						Constants.PERIPHERAL_ONOFF);
-				timeBtn.setImageResource(R.drawable.time_black);
-				System.out.println("tb"); // ///////////////////////
-			}
-		} else if (sel == 0) { // 아무일도 하지 않음
-			if (Constants.ALARM_STATE.equals("0")) {
-				timeBtn.setImageResource(R.drawable.time_black);
-				System.out.println("tb"); // ///////////////////////
-			} else if (Constants.ALARM_STATE.equals("1")) {
-				timeBtn.setImageResource(R.drawable.time_orange);
-				System.out.println("to"); // ///////////////////////
-
-			}
+		} else if (sel == 1) { // 아무일도 하지 않음
 			if (Constants.DEVICE_STATE.equals("0")) {
 				devOnOffBtn.setImageResource(R.drawable.power_black);
 				System.out.println("pb"); // ///////////////////////
@@ -137,9 +110,6 @@ public class MainActivity extends Activity {
 
 		}
 		mDbOpenHelper.close();
-		// 앱 시작할 때 service 시작
-		setService();
-
 	}
 
 	private void addListener() {
@@ -160,20 +130,10 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this,
 						RegistrationActivity.class);
-				
-				isregistartionClicked = true;
-				setService();
+				// setService();
 				MainActivity.this.finish();
 				startActivity(intent);
 
-			}
-		});
-		timeBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				deviceConfirm(1); // time
 			}
 		});
 		devOnOffBtn.setOnClickListener(new View.OnClickListener() {
@@ -191,24 +151,27 @@ public class MainActivity extends Activity {
 		deviceNameText = (TextView) findViewById(R.id.deviceNameText);
 		finderBtn = (ImageButton) findViewById(R.id.finderBtn);
 		registrationBtn = (ImageButton) findViewById(R.id.registrationBtn);
-		timeBtn = (ImageButton) findViewById(R.id.timeBtn);
 		devOnOffBtn = (ImageButton) findViewById(R.id.devOnOffBtn);
 	}
 
-	private void setService() {
-		getData();
-		Intent intent = new Intent(this, AlarmService.class);
-		if ((Constants.ALARM_STATE.equals("1")
-				|| Constants.DEVICE_STATE.equals("1")) && !isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("0")) { // alarm is turned on
-			startService(intent);
-		} else if(!isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("1") && Constants.ALARM_STATE.equals("0")
-				&& Constants.DEVICE_STATE.equals("0")){
-			stopService(intent);
-		}
-		if (isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("1")) { // alarm is turned off
-			stopService(intent);
-			isregistartionClicked = false;
-		}
-		mDbOpenHelper.close();
-	}
+	// private void setService() {
+	// getData();
+	// Intent intent = new Intent(this, AlarmService.class);
+	// if ((Constants.ALARM_STATE.equals("1")
+	// || Constants.DEVICE_STATE.equals("1")) && !isregistartionClicked &&
+	// Constants.PERIPHERAL_ONOFF.equals("0")) { // alarm is turned on
+	// startService(intent);
+	// } else if(!isregistartionClicked &&
+	// Constants.PERIPHERAL_ONOFF.equals("1") &&
+	// Constants.ALARM_STATE.equals("0")
+	// && Constants.DEVICE_STATE.equals("0")){
+	// stopService(intent);
+	// }
+	// if (isregistartionClicked && Constants.PERIPHERAL_ONOFF.equals("1")) { //
+	// alarm is turned off
+	// stopService(intent);
+	// isregistartionClicked = false;
+	// }
+	// mDbOpenHelper.close();
+	// }
 }

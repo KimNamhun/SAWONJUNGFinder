@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbOpenHelper {
 	private static final String DATABASE_NAME = "beaconfinder.db";
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 	public static SQLiteDatabase mDB;
 	private DatabaseHelper mDBHelper;
 	private Context mCtx;
@@ -51,26 +51,26 @@ public class DbOpenHelper {
 	}
 
 	public long insertColumn(int id, String name, String macaddress,
-			String alarmstate, String devicestate, String peripheralonoff) {
+			String devicestate, String longitude, String latitude) {
 		ContentValues values = new ContentValues();
 		values.put(Database.CreateDB.ID, id);
 		values.put(Database.CreateDB.NAME, name);
 		values.put(Database.CreateDB.MACADDRESS, macaddress);
-		values.put(Database.CreateDB.ALARMSTATE, alarmstate);
 		values.put(Database.CreateDB.DEVICESTATE, devicestate);
-		values.put(Database.CreateDB.PERIPHERALONOFF, peripheralonoff);
+		values.put(Database.CreateDB.LONGITUDE, longitude);
+		values.put(Database.CreateDB.LATITUDE, latitude);
 		return mDB.insert(Database.CreateDB._TABLENAME, null, values);
 	}
 
 	public boolean updateColumn(int id, String name, String macaddress,
-			String alarmstate, String devicestate, String peripheralonoff) {
+			String devicestate, String longitude, String latitude) {
 		ContentValues values = new ContentValues();
 		values.put(Database.CreateDB.ID, id);
 		values.put(Database.CreateDB.NAME, name);
 		values.put(Database.CreateDB.MACADDRESS, macaddress);
-		values.put(Database.CreateDB.ALARMSTATE, alarmstate);
 		values.put(Database.CreateDB.DEVICESTATE, devicestate);
-		values.put(Database.CreateDB.PERIPHERALONOFF, peripheralonoff);
+		values.put(Database.CreateDB.LONGITUDE, longitude);
+		values.put(Database.CreateDB.LATITUDE, latitude);
 		return mDB.update(Database.CreateDB._TABLENAME, values, "id=" + id,
 				null) > 0;
 	}

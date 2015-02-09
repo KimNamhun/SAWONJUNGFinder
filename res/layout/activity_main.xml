@@ -54,7 +54,7 @@
             android:id="@+id/deviceNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loading..."
+            android:text="기기를 등록해 주세요."
             android:textSize="20sp" >
         </TextView>
     </LinearLayout>
@@ -83,22 +83,11 @@
         android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@+id/timeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:background="#00000000"
-            android:contentDescription="Alarm Button"
-            android:src="@drawable/time_black" >
-        </ImageButton>
-
-        <ImageButton
             android:id="@+id/devOnOffBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
             android:background="#00000000"
-            android:contentDescription="Finder Button"
+            android:contentDescription="Device OnOff Button"
             android:src="@drawable/power_black" >
         </ImageButton>
     </LinearLayout>

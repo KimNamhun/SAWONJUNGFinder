@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -50,82 +49,82 @@ public class AlarmService extends Service {
 		getData();
 		System.out.println("======================getData()1================");
 
-		if (Constants.ALARM_STATE.equals("1")
-				&& Constants.PERIPHERAL_ONOFF.equals("0")) {
-			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-					Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
-					Constants.DEVICE_STATE, "1");
-			setCentralManager();
-			System.out
-					.println("=====================start alarm service========="
-							+ Constants.DEVICE_NAME + "===================");
-		} else if (Constants.DEVICE_STATE.equals("1")
-				&& Constants.PERIPHERAL_ONOFF.equals("0")) {
-			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-					Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
-					Constants.DEVICE_STATE, "1");
-			setCentralManager();
-			System.out
-					.println("=====================start device service========="
-							+ Constants.DEVICE_NAME + "===================");
-		}
-		isCreated = true;
-		mDbOpenHelper.close();
+		// if (Constants.ALARM_STATE.equals("1")
+		// && Constants.PERIPHERAL_ONOFF.equals("0")) {
+		// mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+		// Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+		// Constants.DEVICE_STATE, "1");
+		// setCentralManager();
+		// System.out
+		// .println("=====================start alarm service========="
+		// + Constants.DEVICE_NAME + "===================");
+		// } else if (Constants.DEVICE_STATE.equals("1")
+		// && Constants.PERIPHERAL_ONOFF.equals("0")) {
+		// mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+		// Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+		// Constants.DEVICE_STATE, "1");
+		// setCentralManager();
+		// System.out
+		// .println("=====================start device service========="
+		// + Constants.DEVICE_NAME + "===================");
+		// }
+		// isCreated = true;
+		// mDbOpenHelper.close();
 
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (!isCreated) {
-			mDbOpenHelper = new DbOpenHelper(getApplicationContext());
-			mDbOpenHelper.open();
-
-			super.onStartCommand(intent, flags, startId);
-
-			getData();
-			System.out
-					.println("======================getData()2================");
-
-			if (Constants.ALARM_STATE.equals("1")) {
-				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-						Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
-						Constants.DEVICE_STATE, "1");
-				setCentralManager();
-				System.out
-						.println("=====================start alarm service========="
-								+ Constants.DEVICE_NAME + "===================");
-			} else if (Constants.DEVICE_STATE.equals("1")) {
-				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-						Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
-						Constants.DEVICE_STATE, "1");
-				setCentralManager();
-				System.out
-						.println("=====================start device service========="
-								+ Constants.DEVICE_NAME + "===================");
-			}
-			mDbOpenHelper.close();
-			
-			return START_STICKY;
-
-		}
-		isCreated = false;
+		// if (!isCreated) {
+		// mDbOpenHelper = new DbOpenHelper(getApplicationContext());
+		// mDbOpenHelper.open();
+		//
+		// super.onStartCommand(intent, flags, startId);
+		//
+		// getData();
+		// System.out
+		// .println("======================getData()2================");
+		//
+		// if (Constants.ALARM_STATE.equals("1")) {
+		// mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+		// Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+		// Constants.DEVICE_STATE, "1");
+		// setCentralManager();
+		// System.out
+		// .println("=====================start alarm service========="
+		// + Constants.DEVICE_NAME + "===================");
+		// } else if (Constants.DEVICE_STATE.equals("1")) {
+		// mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+		// Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+		// Constants.DEVICE_STATE, "1");
+		// setCentralManager();
+		// System.out
+		// .println("=====================start device service========="
+		// + Constants.DEVICE_NAME + "===================");
+		// }
+		// mDbOpenHelper.close();
+		//
+		// return START_STICKY;
+		//
+		// }
+		// isCreated = false;
 		return START_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
-		mDbOpenHelper = new DbOpenHelper(getApplicationContext());
-		mDbOpenHelper.open();
-		getData();
-		System.out.println("=================stop service====================");
-		super.onDestroy();
-		if (Constants.PERIPHERAL_ONOFF.equals("1")) {
-			centralManager.stopScanning();
-			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-					Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
-					Constants.DEVICE_STATE, "0");
-		}
-		mDbOpenHelper.close();
+		// mDbOpenHelper = new DbOpenHelper(getApplicationContext());
+		// mDbOpenHelper.open();
+		// getData();
+		// System.out.println("=================stop service====================");
+		// super.onDestroy();
+		// if (Constants.PERIPHERAL_ONOFF.equals("1")) {
+		// centralManager.stopScanning();
+		// mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+		// Constants.DEVICE_ADDRESS, Constants.ALARM_STATE,
+		// Constants.DEVICE_STATE, "0");
+		// }
+		// mDbOpenHelper.close();
 	}
 
 	private void setCentralManager() {
@@ -189,20 +188,20 @@ public class AlarmService extends Service {
 
 	private void getData() {
 
-		Cursor mCursor = mDbOpenHelper.getAll();
-		// 모든 row를 받아옴
-		mCursor.moveToFirst();
-		// 받아온 row의 attribute 값을 variable에 저장
-		Constants.DEVICE_NAME = mCursor.getString(mCursor
-				.getColumnIndex("name"));
-		Constants.DEVICE_ADDRESS = mCursor.getString(mCursor
-				.getColumnIndex("macaddress"));
-		Constants.ALARM_STATE = mCursor.getString(mCursor
-				.getColumnIndex("alarmstate"));
-		Constants.DEVICE_STATE = mCursor.getString(mCursor
-				.getColumnIndex("devicestate"));
-		Constants.PERIPHERAL_ONOFF = mCursor.getString(mCursor
-				.getColumnIndex("peripheralonoff"));
+		// Cursor mCursor = mDbOpenHelper.getAll();
+		// // 모든 row를 받아옴
+		// mCursor.moveToFirst();
+		// // 받아온 row의 attribute 값을 variable에 저장
+		// Constants.DEVICE_NAME = mCursor.getString(mCursor
+		// .getColumnIndex("name"));
+		// Constants.DEVICE_ADDRESS = mCursor.getString(mCursor
+		// .getColumnIndex("macaddress"));
+		// Constants.ALARM_STATE = mCursor.getString(mCursor
+		// .getColumnIndex("alarmstate"));
+		// Constants.DEVICE_STATE = mCursor.getString(mCursor
+		// .getColumnIndex("devicestate"));
+		// Constants.PERIPHERAL_ONOFF = mCursor.getString(mCursor
+		// .getColumnIndex("peripheralonoff"));
 	}
 
 }

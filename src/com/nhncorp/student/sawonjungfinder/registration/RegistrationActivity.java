@@ -75,13 +75,13 @@ public class RegistrationActivity extends Activity {
 				mDbOpenHelper = new DbOpenHelper(RegistrationActivity.this);
 				mDbOpenHelper.open();
 				mDbOpenHelper.updateColumn(1, cardNamingEdit.getText()
-						.toString(), peripheralValue.getBDAddress(), "1", "1",
+						.toString(), peripheralValue.getBDAddress(), "1", "0",
 						"0"); // id,
 				// name,
 				// address,
-				// alarm,
 				// devOnOff
-				// peripheralonoff
+				// longitude
+				// latitude
 				Cursor mCursor = mDbOpenHelper.getMatchName(cardNamingEdit
 						.getText().toString()); // test
 				mCursor.moveToFirst(); // test
