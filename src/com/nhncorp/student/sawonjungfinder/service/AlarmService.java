@@ -64,7 +64,7 @@ public class AlarmService extends Service {
 		super.onDestroy();
 		if (notificationManager != null)
 			notificationManager.cancel(0);
-		notifycount = 10;
+		notifycount = 20;
 		centralManager.stopScanning();
 	}
 
@@ -76,6 +76,12 @@ public class AlarmService extends Service {
 			@Override
 			public void onPeripheralScan(Central central,
 					final Peripheral peripheral) {
+				notifycount++;
+				if (notifycount >= 20) {
+					if (notificationManager != null)
+						notificationManager.cancel(0);
+					notifycount = 0;
+				}
 				if (Constants.DEVICE_ADDRESS.equals(peripheral.getBDAddress())) {
 					runOnUiThread(new Runnable() {
 						public void run() {
@@ -156,13 +162,6 @@ public class AlarmService extends Service {
 				.setContentIntent(pendingIntent).build();
 		System.out.println("push=============================== service");
 		notificationManager.notify(0, notification);
-		if (notifycount == 10) {
-			notificationManager.cancel(0);
-			notifycount = 0;
-		} else {
-			notifycount++;
-		}
-
 		// push notification
 
 	}
