@@ -2,34 +2,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:layout_marginTop="40sp"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/distanceText"
+    <ImageView
+        android:id="@+id/distanceImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
+        android:layout_gravity="center"
+        android:background="@drawable/wifi_icon_0"
+        android:contentDescription="signal power" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="40sp" >
     </TextView>
 
-    <!-- Test 영역 -->
-
-    <TextView
+    <LinearLayout
+        android:id="@+id/map"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp" >
-    </TextView>
-
-    <TextView
-        android:id="@+id/distanceStatusText"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFF0F8FF"
-        android:text="Loading..."
-        android:textSize="40sp" >
-    </TextView>
-
-    <!-- Test 영역 -->
+        android:orientation="vertical" >
+    </LinearLayout>
 
 </LinearLayout>

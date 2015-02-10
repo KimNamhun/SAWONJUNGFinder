@@ -1,34 +1,34 @@
 package com.nhncorp.student.sawonjungfinder.finder;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Window;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nhncorp.student.sawonjungfinder.R;
+import com.nhncorp.student.sawonjungfinder.R.drawable;
 import com.nhncorp.student.sawonjungfinder.constants.Constants;
-import com.wizturn.sdk.central.Central;
-import com.wizturn.sdk.central.CentralManager;
-import com.wizturn.sdk.peripheral.Peripheral;
-import com.wizturn.sdk.peripheral.PeripheralScanListener;
 
 public class FinderActivity extends Activity {
 
-	private TextView distanceText;
-	private TextView distanceStatusText;
-	private CentralManager centralManager;
+	private ImageView distanceImg;
+	private Thread myThread = null;
+	private boolean runThread = true;
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
 		if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
-				centralManager.stopScanning();
+				if (myThread != null && myThread.isAlive()) {
+					runThread = false;
+				}
 				this.finish();
+
 			}
 		}
 		return false;
@@ -44,53 +44,66 @@ public class FinderActivity extends Activity {
 	}
 
 	private void init() {
+		confirmService();
 		getView();
-		setCentralManager(this.getApplicationContext());
+
 	}
 
-	private void setView(Double distance) {
-		distanceText.setText(distance + "M");
-		if (distance > 15) { // //////////
-			distanceStatusText.setText("사원증이 멀어졌어요!"); // ////////////
-			distanceStatusText.setBackgroundColor(Color.GREEN);// ////////////
-			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			vibrator.vibrate(1000);
-		} else { // ////////////
-			distanceStatusText.setText("Zzz..."); // /////////////
-			distanceStatusText
-					.setBackgroundColor(Color.parseColor("#FFF0F8FF")); // ////////////
+	private void confirmService() {
+		if (Constants.DEVICE_STATE.equals("1")) {
+		} else if (Constants.DEVICE_STATE.equals("0")) {
+			Toast.makeText(this, "서비스가 꺼져있습니다.", Toast.LENGTH_LONG).show();
 		}
 
 	}
 
 	private void getView() {
-		distanceText = (TextView) findViewById(R.id.distanceText);
-		distanceStatusText = (TextView) findViewById(R.id.distanceStatusText); // ///////////////////
+		distanceImg = (ImageView) findViewById(R.id.distanceImg);
 
 	}
 
-	private void setCentralManager(Context context) {
-		centralManager = CentralManager.getInstance();
-		centralManager.init(context);
-		centralManager.setPeripheralScanListener(new PeripheralScanListener() {
-			@Override
-			public void onPeripheralScan(Central central,
-					final Peripheral peripheral) {
-				if (Constants.DEVICE_ADDRESS.equals(peripheral.getBDAddress())) {
-					System.out.println("onPeripheralScan() : peripheral : "
-							+ peripheral); // /////////////////////////////////////////////////////
+	Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			updateThread();
+		}
+	};
 
-					runOnUiThread(new Runnable() {
-						public void run() {
-							setView(peripheral.getDistance());
-						}
-					});
-
+	@Override
+	protected void onStart() {
+		super.onStart();
+		myThread = new Thread(new Runnable() {
+			public void run() {
+				while (runThread) {
+					try {
+						handler.sendMessage(handler.obtainMessage());
+						Thread.sleep(100);
+					} catch (Throwable t) {
+					}
 				}
 			}
-
 		});
-		centralManager.startScanning();
+		if (Constants.DEVICE_STATE.equals("1")) {
+			myThread.start();
+		}
 	}
 
+	private void updateThread() {
+		System.out.println("Distance ***************************************"
+				+ Constants.DISTANCE);
+		System.out
+				.println("notifycount ***************************************"
+						+ Constants.NOTIFYCOUNT);
+		if (Constants.NOTIFYCOUNT >= 4) {
+			distanceImg.setBackgroundResource(drawable.wifi_icon_0);
+		} else if (Constants.DISTANCE >= 0 && Constants.DISTANCE < 9) {
+			distanceImg.setBackgroundResource(drawable.wifi_icon_3);
+		} else if (Constants.DISTANCE >= 0 && Constants.DISTANCE >= 11
+				&& Constants.DISTANCE < 17) {
+			distanceImg.setBackgroundResource(drawable.wifi_icon_2);
+		} else if (Constants.DISTANCE >= 0 && Constants.DISTANCE > 19) {
+			distanceImg.setBackgroundResource(drawable.wifi_icon_1);
+		}
+
+	}
 }

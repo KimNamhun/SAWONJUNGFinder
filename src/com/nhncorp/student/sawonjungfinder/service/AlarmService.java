@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Vibrator;
 
 import com.nhncorp.student.sawonjungfinder.R;
@@ -35,8 +36,6 @@ public class AlarmService extends Service {
 
 	private DbOpenHelper mDbOpenHelper;
 
-	private int notifycount = 0;
-
 	ArrayList<Double> valueArr = new ArrayList<Double>();
 
 	private int sumCount = 0;
@@ -48,6 +47,20 @@ public class AlarmService extends Service {
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mTimerHandler.sendEmptyMessage(0);
+	}
+
+	Handler mTimerHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			Constants.NOTIFYCOUNT++;
+			mTimerHandler.sendEmptyMessageDelayed(0, Constants.NOTIFYSPEED);
+		}
+	};
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -62,9 +75,11 @@ public class AlarmService extends Service {
 	public void onDestroy() {
 		System.out.println("=================stop service====================");
 		super.onDestroy();
-		if (notificationManager != null)
+		if (notificationManager != null) {
 			notificationManager.cancel(0);
-		notifycount = 20;
+			Constants.DISTANCE = -1;
+		}
+		Constants.NOTIFYCOUNT = 5;
 		centralManager.stopScanning();
 	}
 
@@ -76,11 +91,14 @@ public class AlarmService extends Service {
 			@Override
 			public void onPeripheralScan(Central central,
 					final Peripheral peripheral) {
-				notifycount++;
-				if (notifycount >= 20) {
-					if (notificationManager != null)
+
+				if (Constants.NOTIFYCOUNT >= 5) {
+					if (notificationManager != null) {
 						notificationManager.cancel(0);
-					notifycount = 0;
+						Constants.DISTANCE = -1;
+					}
+
+					Constants.NOTIFYCOUNT = 0;
 				}
 				if (Constants.DEVICE_ADDRESS.equals(peripheral.getBDAddress())) {
 					runOnUiThread(new Runnable() {
@@ -111,6 +129,7 @@ public class AlarmService extends Service {
 								}
 
 								setNotification(avg);
+								Constants.DISTANCE = avg;
 							}
 
 							System.out
@@ -169,8 +188,10 @@ public class AlarmService extends Service {
 	public final void runOnUiThread(Runnable action) {
 		if (Thread.currentThread() != mUiThread) {
 			mHandler.post(action);
+
 		} else {
 			action.run();
+
 		}
 	}
 
