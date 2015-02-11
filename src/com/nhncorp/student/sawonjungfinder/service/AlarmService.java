@@ -77,7 +77,6 @@ public class AlarmService extends Service {
 		super.onDestroy();
 		if (notificationManager != null) {
 			notificationManager.cancel(0);
-			Constants.DISTANCE = -1;
 		}
 		Constants.NOTIFYCOUNT = 5;
 		centralManager.stopScanning();
@@ -95,7 +94,7 @@ public class AlarmService extends Service {
 				if (Constants.NOTIFYCOUNT >= 5) {
 					if (notificationManager != null) {
 						notificationManager.cancel(0);
-						Constants.DISTANCE = -1;
+					
 					}
 
 					Constants.NOTIFYCOUNT = 0;

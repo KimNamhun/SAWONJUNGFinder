@@ -1,30 +1,162 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="40sp"
-    android:orientation="vertical" >
-
-    <ImageView
-        android:id="@+id/distanceImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/wifi_icon_0"
-        android:contentDescription="signal power" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp" >
-    </TextView>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    android:orientation="horizontal"
+    android:scaleType="matrix" >
 
     <LinearLayout
-        android:id="@+id/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF0F8FF"
+        android:layout_weight="1"
+        android:background="#000000"
+        android:orientation="vertical"
+        android:scaleType="matrix" >
+
+        <ImageView
+            android:id="@+id/distanceImg3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img03"
+            android:contentDescription="signal power"
+            android:scaleType="matrix" />
+
+        <ImageView
+            android:id="@+id/distanceImg4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img04"
+            android:contentDescription="signal power"
+            android:scaleType="matrix" />
+
+        <ImageView
+            android:id="@+id/distanceImg5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img05"
+            android:contentDescription="signal power"
+            android:scaleType="matrix" />
+
+        <ImageView
+            android:id="@+id/distanceImg6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img06"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img07"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img08"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/distanceImg9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img09"
+            android:contentDescription="signal power"
+           
+            android:gravity="center"
+            android:textSize="40px"
+            android:textColor="#FFFFFF" />
+
+        <ImageView
+            android:id="@+id/distanceImg10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img10"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img11"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img12"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img13"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img14"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img15"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/distanceImg16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/img16"
+            android:contentDescription="signal power"
+            android:scaleType="fitXY" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#000000"
         android:orientation="vertical" >
+<!--  
+        <ImageView
+            android:id="@+id/distanceImg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/img01"
+            android:contentDescription="signal power" />-->
     </LinearLayout>
 
 </LinearLayout>
