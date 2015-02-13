@@ -50,13 +50,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <!-- widget setting -->
-        <receiver android:name=".widget.WidgetActivity" >
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_configuration" />
-        </receiver>
     </application>
 
 </manifest>

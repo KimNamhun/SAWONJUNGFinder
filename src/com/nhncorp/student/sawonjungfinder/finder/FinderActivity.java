@@ -1,4 +1,4 @@
-package com.nhncorp.student.sawonjungfinder.finder;
+/*package com.nhncorp.student.sawonjungfinder.finder;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -319,3 +319,4 @@ public class FinderActivity extends Activity {
 
 	}
 }
+*/
