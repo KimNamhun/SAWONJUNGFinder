@@ -1,38 +1,72 @@
-/*package com.nhncorp.student.sawonjungfinder.finder;
+package com.nhncorp.student.sawonjungfinder.finder;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nhncorp.student.sawonjungfinder.R;
 import com.nhncorp.student.sawonjungfinder.R.drawable;
 import com.nhncorp.student.sawonjungfinder.constants.Constants;
+import com.nhncorp.student.sawonjungfinder.map.MapActivity;
 
 public class FinderActivity extends Activity {
 
+	private ImageView distanceImg0;
+
+	private ImageView distanceImg1;
+
+	private ImageView distanceImg2;
+
 	private ImageView distanceImg3;
+
 	private ImageView distanceImg4;
+
 	private ImageView distanceImg5;
+
 	private ImageView distanceImg6;
+
 	private ImageView distanceImg7;
+
 	private ImageView distanceImg8;
-	private TextView distanceImg9;
+
+	private ImageView distanceImg9;
+
 	private ImageView distanceImg10;
+
 	private ImageView distanceImg11;
+
 	private ImageView distanceImg12;
+
 	private ImageView distanceImg13;
+
 	private ImageView distanceImg14;
+
 	private ImageView distanceImg15;
+
 	private ImageView distanceImg16;
+
+	private ImageView distanceImg17;
+
+	private ImageView distanceData;
+
+	private ImageView distanceMessage;
+
+	private ImageButton mapBtn;
 
 	private Thread myThread = null;
 	private boolean runThread = true;
+
+	int countVibrator = 0;
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
@@ -61,6 +95,21 @@ public class FinderActivity extends Activity {
 	private void init() {
 		confirmService();
 		getView();
+		addListener();
+
+	}
+
+	private void addListener() {
+		mapBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(FinderActivity.this,
+						MapActivity.class);
+				startActivity(intent);
+
+			}
+		});
 
 	}
 
@@ -73,19 +122,48 @@ public class FinderActivity extends Activity {
 	}
 
 	private void getView() {
+
+		distanceData = (ImageView) findViewById(R.id.distanceData);
+
+		distanceMessage = (ImageView) findViewById(R.id.distanceMessage);
+
+		distanceImg0 = (ImageView) findViewById(R.id.distanceImg0);
+
+		distanceImg1 = (ImageView) findViewById(R.id.distanceImg1);
+
+		distanceImg2 = (ImageView) findViewById(R.id.distanceImg2);
+
 		distanceImg3 = (ImageView) findViewById(R.id.distanceImg3);
+
 		distanceImg4 = (ImageView) findViewById(R.id.distanceImg4);
+
 		distanceImg5 = (ImageView) findViewById(R.id.distanceImg5);
+
 		distanceImg6 = (ImageView) findViewById(R.id.distanceImg6);
+
 		distanceImg7 = (ImageView) findViewById(R.id.distanceImg7);
+
 		distanceImg8 = (ImageView) findViewById(R.id.distanceImg8);
-		distanceImg9 = (TextView) findViewById(R.id.distanceImg9);
+
+		distanceImg9 = (ImageView) findViewById(R.id.distanceImg9);
+
 		distanceImg10 = (ImageView) findViewById(R.id.distanceImg10);
+
 		distanceImg11 = (ImageView) findViewById(R.id.distanceImg11);
+
 		distanceImg12 = (ImageView) findViewById(R.id.distanceImg12);
+
 		distanceImg13 = (ImageView) findViewById(R.id.distanceImg13);
+
 		distanceImg14 = (ImageView) findViewById(R.id.distanceImg14);
+
 		distanceImg15 = (ImageView) findViewById(R.id.distanceImg15);
+
+		distanceImg16 = (ImageView) findViewById(R.id.distanceImg16);
+
+		distanceImg17 = (ImageView) findViewById(R.id.distanceImg17);
+
+		mapBtn = (ImageButton) findViewById(R.id.mapBtn);
 
 	}
 
@@ -116,207 +194,725 @@ public class FinderActivity extends Activity {
 	}
 
 	private void updateThread() {
-		//distanceImg9.setText(Constants.DISTANCE + " M");
-		if (Constants.DISTANCE >= 0 && Constants.DISTANCE <= 3) {
-			distanceImg3.setBackgroundResource(drawable.img03);
-			distanceImg4.setBackgroundResource(drawable.img04);
-			distanceImg5.setBackgroundResource(drawable.img05);
-			distanceImg6.setBackgroundResource(drawable.img06);
-			distanceImg7.setBackgroundResource(drawable.img07);
-			distanceImg8.setBackgroundResource(drawable.img08);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
+		// distanceImg9.setText(Constants.DISTANCE + " M");
 
-		} else if (Constants.DISTANCE > 3 && Constants.DISTANCE <= 6) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img04);
-			distanceImg5.setBackgroundResource(drawable.img05);
-			distanceImg6.setBackgroundResource(drawable.img06);
-			distanceImg7.setBackgroundResource(drawable.img07);
-			distanceImg8.setBackgroundResource(drawable.img08);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 6 && Constants.DISTANCE <= 9) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img05);
-			distanceImg6.setBackgroundResource(drawable.img06);
-			distanceImg7.setBackgroundResource(drawable.img07);
-			distanceImg8.setBackgroundResource(drawable.img08);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 9 && Constants.DISTANCE <= 12) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img06);
-			distanceImg7.setBackgroundResource(drawable.img07);
-			distanceImg8.setBackgroundResource(drawable.img08);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 12 && Constants.DISTANCE <= 14) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img07);
-			distanceImg8.setBackgroundResource(drawable.img08);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 14 && Constants.DISTANCE <= 16) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img08);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 16 && Constants.DISTANCE <= 18) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img09);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 18 && Constants.DISTANCE <= 19) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img10);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 19 && Constants.DISTANCE <= 20) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img02);
-			distanceImg11.setBackgroundResource(drawable.img11);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 20 && Constants.DISTANCE <= 21) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img02);
-			distanceImg11.setBackgroundResource(drawable.img02);
-			distanceImg12.setBackgroundResource(drawable.img12);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 21 && Constants.DISTANCE <= 22) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img02);
-			distanceImg11.setBackgroundResource(drawable.img02);
-			distanceImg12.setBackgroundResource(drawable.img02);
-			distanceImg13.setBackgroundResource(drawable.img13);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 22 && Constants.DISTANCE <= 23) {
+		// 거리는 1m단위로 제공
 
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img02);
-			distanceImg11.setBackgroundResource(drawable.img02);
-			distanceImg12.setBackgroundResource(drawable.img02);
-			distanceImg13.setBackgroundResource(drawable.img02);
-			distanceImg14.setBackgroundResource(drawable.img14);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 23 && Constants.DISTANCE <= 24) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img02);
-			distanceImg11.setBackgroundResource(drawable.img02);
-			distanceImg12.setBackgroundResource(drawable.img02);
-			distanceImg13.setBackgroundResource(drawable.img02);
-			distanceImg14.setBackgroundResource(drawable.img02);
-			distanceImg15.setBackgroundResource(drawable.img15);
-		} else if (Constants.DISTANCE > 24) {
-			distanceImg3.setBackgroundResource(drawable.img02);
-			distanceImg4.setBackgroundResource(drawable.img02);
-			distanceImg5.setBackgroundResource(drawable.img02);
-			distanceImg6.setBackgroundResource(drawable.img02);
-			distanceImg7.setBackgroundResource(drawable.img02);
-			distanceImg8.setBackgroundResource(drawable.img02);
-			distanceImg9.setBackgroundResource(drawable.img02);
-			distanceImg10.setBackgroundResource(drawable.img02);
-			distanceImg11.setBackgroundResource(drawable.img02);
-			distanceImg12.setBackgroundResource(drawable.img02);
-			distanceImg13.setBackgroundResource(drawable.img02);
-			distanceImg14.setBackgroundResource(drawable.img02);
-			distanceImg15.setBackgroundResource(drawable.img02);
+		String sDistance = "m" + Constants.DISTANCE;
+
+		int distanceId = this.getResources().getIdentifier(sDistance,
+
+		"drawable", this.getPackageName());
+
+		distanceData.setBackgroundResource(distanceId);
+
+		if (Constants.DISTANCE <= 2) {
+
+			// 2m 이하일 때 메세지 표시, 진동 발생
+
+			distanceMessage.setBackgroundResource(drawable.message);
+
+			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+			if (countVibrator == 0) {
+
+				vibrator.vibrate(200);
+
+				countVibrator++;
+
+			}
+
+		} else {
+			distanceMessage.setBackgroundResource(drawable.message2);
+
+			countVibrator = 0;
+
 		}
 
+		if (Constants.DISTANCE == 0) {
+
+			distanceImg0.setBackgroundResource(drawable.img0);
+
+			distanceImg1.setBackgroundResource(drawable.img1);
+
+			distanceImg2.setBackgroundResource(drawable.img2);
+
+			distanceImg3.setBackgroundResource(drawable.img3);
+
+			distanceImg4.setBackgroundResource(drawable.img4);
+
+			distanceImg5.setBackgroundResource(drawable.img5);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 1) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img1);
+
+			distanceImg2.setBackgroundResource(drawable.img2);
+
+			distanceImg3.setBackgroundResource(drawable.img3);
+
+			distanceImg4.setBackgroundResource(drawable.img4);
+
+			distanceImg5.setBackgroundResource(drawable.img5);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 2) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img2);
+
+			distanceImg3.setBackgroundResource(drawable.img3);
+
+			distanceImg4.setBackgroundResource(drawable.img4);
+
+			distanceImg5.setBackgroundResource(drawable.img5);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 3) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img3);
+
+			distanceImg4.setBackgroundResource(drawable.img4);
+
+			distanceImg5.setBackgroundResource(drawable.img5);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 4) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img4);
+
+			distanceImg5.setBackgroundResource(drawable.img5);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 5) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img5);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 6) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img6);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 7) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img7);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 8) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img8);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE == 9) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img9);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 9 && Constants.DISTANCE <= 12) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img10);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 12 && Constants.DISTANCE <= 15) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img11);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 15 && Constants.DISTANCE <= 18) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img12);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 18 && Constants.DISTANCE <= 21) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img19);
+
+			distanceImg13.setBackgroundResource(drawable.img13);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 21 && Constants.DISTANCE <= 24) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img19);
+
+			distanceImg13.setBackgroundResource(drawable.img19);
+
+			distanceImg14.setBackgroundResource(drawable.img14);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 24 && Constants.DISTANCE <= 27) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img19);
+
+			distanceImg13.setBackgroundResource(drawable.img19);
+
+			distanceImg14.setBackgroundResource(drawable.img19);
+
+			distanceImg15.setBackgroundResource(drawable.img15);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 27 && Constants.DISTANCE <= 30) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img19);
+
+			distanceImg13.setBackgroundResource(drawable.img19);
+
+			distanceImg14.setBackgroundResource(drawable.img19);
+
+			distanceImg15.setBackgroundResource(drawable.img19);
+
+			distanceImg16.setBackgroundResource(drawable.img16);
+
+			distanceImg17.setBackgroundResource(drawable.img18);
+
+		} else if (Constants.DISTANCE > 30) {
+
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img19);
+
+			distanceImg13.setBackgroundResource(drawable.img19);
+
+			distanceImg14.setBackgroundResource(drawable.img19);
+
+			distanceImg15.setBackgroundResource(drawable.img19);
+
+			distanceImg16.setBackgroundResource(drawable.img19);
+
+			distanceImg17.setBackgroundResource(drawable.img17);
+
+		}
 	}
 }
-*/

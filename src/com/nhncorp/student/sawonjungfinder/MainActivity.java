@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.nhncorp.student.sawonjungfinder.bluetooth.BlueToothEnabler;
 import com.nhncorp.student.sawonjungfinder.constants.Constants;
 import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
+import com.nhncorp.student.sawonjungfinder.finder.FinderActivity;
 import com.nhncorp.student.sawonjungfinder.registration.RegistrationActivity;
 import com.nhncorp.student.sawonjungfinder.service.AlarmService;
 
@@ -117,16 +118,16 @@ public class MainActivity extends Activity {
 	}
 
 	private void addListener() {
-		// finderBtn.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// Intent intent = new Intent(MainActivity.this,
-		// FinderActivity.class);
-		// startActivity(intent);
-		//
-		// }
-		// });
+		finderBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this,
+						FinderActivity.class);
+				startActivity(intent);
+
+			}
+		});
 
 		registrationBtn.setOnClickListener(new View.OnClickListener() {
 

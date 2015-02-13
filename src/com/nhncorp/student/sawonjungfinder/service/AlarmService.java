@@ -1,6 +1,9 @@
 package com.nhncorp.student.sawonjungfinder.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,6 +12,11 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -36,26 +44,53 @@ public class AlarmService extends Service {
 
 	private DbOpenHelper mDbOpenHelper;
 
-	ArrayList<Double> valueArr = new ArrayList<Double>();
-
-	private int sumCount = 0;
-	private int sum = 0;
-
 	private int setAlarm = 0;
 
 	int notifycount = 0;
 
-	int distance = 0;
+	// new algorithm variable
+	ArrayList<Double> storedArr = new ArrayList<Double>();
+	ArrayList<Double> dataArr = new ArrayList<Double>();
+	private double sum2 = 0;
+	SimpleDateFormat formatter = new SimpleDateFormat("ss", Locale.KOREA);
+	private String scaleTime = "blank";
+	private String currentTime = null;
+	private static final int FREQUENCY = 20;
+
+	private LocationManager locationManager;
+	private String provider;
+
+	private GpsLocationListener listener = null;
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
 
+	private class GpsLocationListener implements LocationListener {
+
+		public void onLocationChanged(Location location) {
+
+		}
+
+		public void onProviderDisabled(String provider) {
+
+		}
+
+		public void onProviderEnabled(String provider) {
+
+		}
+
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+
+		}
+	}
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		mTimerHandler.sendEmptyMessage(0);
+
 	}
 
 	Handler mTimerHandler = new Handler() {
@@ -105,36 +140,527 @@ public class AlarmService extends Service {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							notifycount = 0;
+
+							// //////////////////////////////////////////////////////////////////////
 							// 거리 수신값 최적화
-							valueArr.add(peripheral.getDistance());
-							sumCount = sumCount + 1;
-							sum += peripheral.getDistance();
-							if (sumCount == 10) {
-								int avg = sum / 10;
-								for (int i = 0; i < valueArr.size(); i++) {
-									if (valueArr.get(i) > avg + 3
-											|| valueArr.get(i) < avg - 3)
-										valueArr.remove(i);
-								}
-								sum = 0;
-								for (int i = 0; i < valueArr.size(); i++) {
-									sum += valueArr.get(i);
-								}
-								avg = sum / valueArr.size(); // 환산된 avg
 
-								sumCount = 3;
-								sum = avg * 3;
-								valueArr.clear();
-								for (int i = 0; i < 3; i++) {
-									valueArr.add((double) avg);
+							// storedArr에 값을 넣는다.
+
+							if (storedArr.size() < FREQUENCY) {
+
+								storedArr.add(0, peripheral.getDistance());
+
+							} else {
+
+								// 데이터 받은 시간 저장
+
+								currentTime = formatter.format(new Date());
+
+								// 기준시간과 데이터 받은시간 비교
+
+								if (scaleTime.equals(currentTime)) {
+
+									dataArr.add(0, peripheral.getDistance());
+
+								} else {
+
+									// dataArr의 개수를 FREQUENCY로 맞춘다.
+
+									if (dataArr.size() < FREQUENCY) {
+
+										/*
+										 * 
+										 * for(int i = 0;
+										 * i<FREQUENCY-dataArr.size(); i++){
+										 * 
+										 * dataArr.add(0,storedArr.get(i)); }
+										 * 
+										 * scan이 계속 일어나서 for문 수행이 제대로 이루어지지 않음
+										 */
+
+										if (dataArr.size() == 0) {
+
+											dataArr = (ArrayList<Double>) storedArr
+
+											.clone();
+
+										} else if (dataArr.size() == 1) {
+
+											dataArr.add(storedArr.get(18));
+
+											dataArr.add(storedArr.get(17));
+
+											dataArr.add(storedArr.get(16));
+
+											dataArr.add(storedArr.get(15));
+
+											dataArr.add(storedArr.get(14));
+
+											dataArr.add(storedArr.get(13));
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 2) {
+
+											dataArr.add(storedArr.get(17));
+
+											dataArr.add(storedArr.get(16));
+
+											dataArr.add(storedArr.get(15));
+
+											dataArr.add(storedArr.get(14));
+
+											dataArr.add(storedArr.get(13));
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 3) {
+
+											dataArr.add(storedArr.get(16));
+
+											dataArr.add(storedArr.get(15));
+
+											dataArr.add(storedArr.get(14));
+
+											dataArr.add(storedArr.get(13));
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 4) {
+
+											dataArr.add(storedArr.get(15));
+
+											dataArr.add(storedArr.get(14));
+
+											dataArr.add(storedArr.get(13));
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 5) {
+
+											dataArr.add(storedArr.get(14));
+
+											dataArr.add(storedArr.get(13));
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 6) {
+
+											dataArr.add(storedArr.get(13));
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 7) {
+
+											dataArr.add(storedArr.get(12));
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 8) {
+
+											dataArr.add(storedArr.get(11));
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 9) {
+
+											dataArr.add(storedArr.get(10));
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 10) {
+
+											dataArr.add(storedArr.get(9));
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 11) {
+
+											dataArr.add(storedArr.get(8));
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 12) {
+
+											dataArr.add(storedArr.get(7));
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 13) {
+
+											dataArr.add(storedArr.get(6));
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 14) {
+
+											dataArr.add(storedArr.get(5));
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 15) {
+
+											dataArr.add(storedArr.get(4));
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 16) {
+
+											dataArr.add(storedArr.get(3));
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 17) {
+
+											dataArr.add(storedArr.get(2));
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 18) {
+
+											dataArr.add(storedArr.get(1));
+
+											dataArr.add(storedArr.get(0));
+
+										} else if (dataArr.size() == 19) {
+
+											dataArr.add(storedArr.get(0));
+
+										}
+
+									}
+
+									// 개수를 맞추면 avg를 구한다. / 갱신한다.
+
+									/*
+									 * 
+									 * for(int i = 0; i < FREQUENCY; i++){ sum
+									 * 
+									 * += dataArr.get(i); Constants.DISTANCE =
+									 * 
+									 * sum/FREQUENCY; }
+									 */
+
+									sum2 = dataArr.get(0) + dataArr.get(1)
+
+									+ dataArr.get(2) + dataArr.get(3)
+
+									+ dataArr.get(4) + dataArr.get(5)
+
+									+ dataArr.get(6) + dataArr.get(7)
+
+									+ dataArr.get(8) + dataArr.get(9)
+
+									+ dataArr.get(10) + dataArr.get(11)
+
+									+ dataArr.get(12) + dataArr.get(13)
+
+									+ dataArr.get(14) + dataArr.get(15)
+
+									+ dataArr.get(16) + dataArr.get(17)
+
+									+ dataArr.get(18) + dataArr.get(19);
+
+									Constants.DISTANCE = (int) Math.round(sum2
+
+									/ FREQUENCY);
+
+									// storedArr를 갱신한다.
+
+									storedArr = (ArrayList<Double>) dataArr
+
+									.clone();
+
+									dataArr.clear();
+
+									dataArr.add(0, peripheral.getDistance());
+
+									// 기준시간을 갱신한다.
+
+									scaleTime = currentTime;
+
 								}
 
-								setNotification(avg); //
-								distance = avg;
 							}
 
-							System.out
-									.println("notification================================");
+							setNotification(Constants.DISTANCE);
+
 						}
 
 					});
@@ -153,11 +679,14 @@ public class AlarmService extends Service {
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
 				intent, 0);
 
-		if (distance < 10 && distance > 3) {
+		if (Constants.DISTANCE < 10 && Constants.DISTANCE > 3) {
 			setAlarm = 1;
 		}
 
-		if (distance > 18 && setAlarm == 1) { // distance 값의 조절이 필요함
+		if (Constants.DISTANCE > 18 && setAlarm == 1) { // distance 값의 조절이 필요함
+			loadGps();
+
+			getgps();
 			notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			notification = new Notification.Builder(getApplicationContext())
 					.setContentTitle("사원증이 멀어졌습니다.")
@@ -218,4 +747,58 @@ public class AlarmService extends Service {
 				.getColumnIndex("latitude"));
 		mDbOpenHelper.close();
 	}
+
+	public void getgps() {
+
+		Location loc = null;
+
+		loc = getLocation();
+
+		if (loc == null) {
+
+		} else {
+			new Location(loc);
+
+			getData();
+			mDbOpenHelper.open();
+
+			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
+					Constants.DEVICE_ADDRESS, Constants.DEVICE_STATE,
+					Double.toString(loc.getLongitude()),
+					Double.toString(loc.getLatitude()));
+
+			
+
+			System.out.println(Constants.LATITUDE);
+			System.out.println(Constants.LONGITUDE);
+
+		}
+
+	}
+
+	private Location getLocation() {
+
+		Location location = locationManager.getLastKnownLocation(provider);
+		if (location == null) {
+			location = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		return location;
+	}
+
+	public void loadGps() {
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE); // 정확도
+		criteria.setPowerRequirement(Criteria.POWER_LOW); // 전원 소비량
+		criteria.setAltitudeRequired(false); // 고도, 높이 값을 얻어 올지를 결정
+		criteria.setBearingRequired(false);
+		criteria.setSpeedRequired(false); // 속도
+		criteria.setCostAllowed(true); // 위치 정보를 얻어 오는데 들어가는 금전적 비용
+		provider = locationManager.getBestProvider(criteria, true);
+		listener = new GpsLocationListener();
+		locationManager.requestLocationUpdates(provider, 1000, 5, listener);
+	}
+
 }
