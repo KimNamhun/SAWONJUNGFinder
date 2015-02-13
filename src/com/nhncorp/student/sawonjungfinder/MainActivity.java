@@ -14,6 +14,7 @@ import com.nhncorp.student.sawonjungfinder.bluetooth.BlueToothEnabler;
 import com.nhncorp.student.sawonjungfinder.constants.Constants;
 import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
 import com.nhncorp.student.sawonjungfinder.registration.RegistrationActivity;
+import com.nhncorp.student.sawonjungfinder.service.AlarmService;
 
 public class MainActivity extends Activity {
 
@@ -91,14 +92,14 @@ public class MainActivity extends Activity {
 						Constants.LATITUDE);
 				devOnOffBtn.setImageResource(R.drawable.power_orange);
 				System.out.println("po"); // ///////////////////////
-				// setService(1); // start
+				setService(1); // start
 			} else if (Constants.DEVICE_STATE.equals("1")) {
 				mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
 						Constants.DEVICE_ADDRESS, "0", Constants.LONGITUDE,
 						Constants.LATITUDE);
 				devOnOffBtn.setImageResource(R.drawable.power_black);
 				System.out.println("pb"); // ///////////////////////
-				// setService(0); // stop
+				setService(0); // stop
 			}
 		} else if (sel == 1) { // 아무일도 하지 않음
 			if (Constants.DEVICE_STATE.equals("0")) {
@@ -161,12 +162,12 @@ public class MainActivity extends Activity {
 		devOnOffBtn = (ImageButton) findViewById(R.id.devOnOffBtn);
 	}
 
-	// private void setService(int i) {
-	// Intent intent = new Intent(this, AlarmService.class);
-	// if (i == 0) { // stop
-	// stopService(intent);
-	// } else if (i == 1) { // start
-	// startService(intent);
-	// }
-	// }
+	private void setService(int i) {
+		Intent intent = new Intent(this, AlarmService.class);
+		if (i == 0) { // stop
+			stopService(intent);
+		} else if (i == 1) { // start
+			startService(intent);
+		}
+	}
 }
