@@ -137,7 +137,7 @@ public class RegistrationActivity extends Activity {
 			cardWaitingText.setText("비콘 카드를 단말기에 접근시켜 주세요...");
 			loadingState = false;
 		}
-		if (peripheral.getDistance() < 0.05 && registrationState == false) {
+		if (peripheral.getDistance() < 0.03 && registrationState == false) {
 			cardWaitingText.setTextSize(60);
 			cardWaitingText.setText("삑 ");
 			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

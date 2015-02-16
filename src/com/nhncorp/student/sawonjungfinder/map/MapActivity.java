@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapController;
@@ -69,6 +70,13 @@ public class MapActivity extends NMapActivity implements
 
 		poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
 		poiData.beginPOIdata(2);
+		
+		if (Constants.LONGITUDE.equals("0")  && Constants.LATITUDE.equals("0")) {
+			Toast.makeText(this, "아직 잃어버린적이 없어요!!", Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(this, "1km이내외의 오차가 있을 수 있습니다.", Toast.LENGTH_LONG)
+					.show();
+		}
 
 	}
 

@@ -46,7 +46,7 @@ public class AlarmService extends Service {
 
 	private int setAlarm = 0;
 
-	int notifycount = 0;
+	int setdistance = 0;
 
 	// new algorithm variable
 	ArrayList<Double> storedArr = new ArrayList<Double>();
@@ -96,15 +96,17 @@ public class AlarmService extends Service {
 	Handler mTimerHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			notifycount++;
+			Constants.NOTIFYCOUNT++;
 			mTimerHandler.sendEmptyMessageDelayed(0, 1000);
-			if (notifycount == 5) {
+			if (Constants.NOTIFYCOUNT > 5) {
 				if (notificationManager != null) {
 					notificationManager.cancel(0);
 
 				}
+
 			}
 		}
+
 	};
 
 	@Override
@@ -128,6 +130,7 @@ public class AlarmService extends Service {
 
 	private void setCentralManager() {
 		getData();
+		mDbOpenHelper.close();
 		centralManager = CentralManager.getInstance();
 		centralManager.init(getApplicationContext());
 		centralManager.setPeripheralScanListener(new PeripheralScanListener() {
@@ -139,7 +142,7 @@ public class AlarmService extends Service {
 
 					runOnUiThread(new Runnable() {
 						public void run() {
-							notifycount = 0;
+							Constants.NOTIFYCOUNT = 0;
 
 							// //////////////////////////////////////////////////////////////////////
 							// 거리 수신값 최적화
@@ -702,6 +705,15 @@ public class AlarmService extends Service {
 			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(1000);
 			setAlarm = 0;
+			setdistance = 1;
+		}
+
+		if (setdistance == 1 && Constants.DISTANCE < 10
+				&& Constants.DISTANCE > 3) {
+			if (notificationManager != null) {
+				notificationManager.cancel(1);
+				setdistance = 0;
+			}
 		}
 
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -745,7 +757,8 @@ public class AlarmService extends Service {
 				.getColumnIndex("longitude"));
 		Constants.LATITUDE = mCursor.getString(mCursor
 				.getColumnIndex("latitude"));
-		mDbOpenHelper.close();
+		
+		
 	}
 
 	public void getgps() {
@@ -760,15 +773,13 @@ public class AlarmService extends Service {
 			new Location(loc);
 
 			getData();
-			mDbOpenHelper.open();
+			
 
 			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
 					Constants.DEVICE_ADDRESS, Constants.DEVICE_STATE,
 					Double.toString(loc.getLongitude()),
 					Double.toString(loc.getLatitude()));
-
-			
-
+			mDbOpenHelper.close();
 			System.out.println(Constants.LATITUDE);
 			System.out.println(Constants.LONGITUDE);
 

@@ -194,6 +194,8 @@ public class FinderActivity extends Activity {
 	}
 
 	private void updateThread() {
+		
+
 		// distanceImg9.setText(Constants.DISTANCE + " M");
 
 		// 거리는 1m단위로 제공
@@ -913,6 +915,50 @@ public class FinderActivity extends Activity {
 
 			distanceImg17.setBackgroundResource(drawable.img17);
 
+		}
+
+		if (Constants.NOTIFYCOUNT > 5) {
+
+			System.out.println("????");
+			distanceImg0.setBackgroundResource(drawable.img19);
+
+			distanceImg1.setBackgroundResource(drawable.img19);
+
+			distanceImg2.setBackgroundResource(drawable.img19);
+
+			distanceImg3.setBackgroundResource(drawable.img19);
+
+			distanceImg4.setBackgroundResource(drawable.img19);
+
+			distanceImg5.setBackgroundResource(drawable.img19);
+
+			distanceImg6.setBackgroundResource(drawable.img19);
+
+			distanceImg7.setBackgroundResource(drawable.img19);
+
+			distanceImg8.setBackgroundResource(drawable.img19);
+
+			distanceImg9.setBackgroundResource(drawable.img19);
+
+			distanceImg10.setBackgroundResource(drawable.img19);
+
+			distanceImg11.setBackgroundResource(drawable.img19);
+
+			distanceImg12.setBackgroundResource(drawable.img19);
+
+			distanceImg13.setBackgroundResource(drawable.img19);
+
+			distanceImg14.setBackgroundResource(drawable.img19);
+
+			distanceImg15.setBackgroundResource(drawable.img19);
+
+			distanceImg16.setBackgroundResource(drawable.img19);
+
+			distanceImg17.setBackgroundResource(drawable.img17);
+
+			distanceMessage.setBackgroundResource(drawable.message3);
+
+			distanceData.setBackgroundResource(drawable.black);
 		}
 	}
 }
