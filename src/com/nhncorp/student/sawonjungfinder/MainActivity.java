@@ -1,10 +1,15 @@
 package com.nhncorp.student.sawonjungfinder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,6 +31,7 @@ public class MainActivity extends Activity {
 	private ImageButton finderBtn;
 	private ImageButton registrationBtn;
 	private ImageButton devOnOffBtn;
+	private ImageButton questionBtn;
 
 	private DbOpenHelper mDbOpenHelper;
 
@@ -154,6 +160,39 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		questionBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (v == questionBtn) {
+					Context mContext = getApplicationContext();
+					LayoutInflater inflater = (LayoutInflater) mContext
+							.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+					// R.layout.dialog는 xml 파일명이고 R.id.popup은 보여줄 레이아웃 아이디
+					View layout = inflater.inflate(R.layout.help_message,
+							(ViewGroup) findViewById(R.id.helpMsg));
+					AlertDialog.Builder aDialog = new AlertDialog.Builder(
+							MainActivity.this);
+
+					aDialog.setTitle("도움말"); // 타이틀바 제목
+					aDialog.setView(layout); // dialog.xml 파일을 뷰로 셋팅
+
+					// 그냥 닫기버튼을 위한 부분
+					aDialog.setNegativeButton("닫기",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+								}
+							});
+					// 팝업창 생성
+					AlertDialog ad = aDialog.create();
+					ad.show();// 보여줌!
+				}
+			}
+
+		});
+
 	}
 
 	private void getView() {
@@ -161,6 +200,7 @@ public class MainActivity extends Activity {
 		finderBtn = (ImageButton) findViewById(R.id.finderBtn);
 		registrationBtn = (ImageButton) findViewById(R.id.registrationBtn);
 		devOnOffBtn = (ImageButton) findViewById(R.id.devOnOffBtn);
+		questionBtn = (ImageButton) findViewById(R.id.questionBtn);
 	}
 
 	private void setService(int i) {

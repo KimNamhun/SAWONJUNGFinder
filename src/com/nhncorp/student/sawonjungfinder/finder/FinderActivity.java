@@ -194,7 +194,6 @@ public class FinderActivity extends Activity {
 	}
 
 	private void updateThread() {
-		
 
 		// distanceImg9.setText(Constants.DISTANCE + " M");
 
@@ -917,9 +916,9 @@ public class FinderActivity extends Activity {
 
 		}
 
-		if (Constants.NOTIFYCOUNT > 5) {
+		if (Constants.NOTIFYCOUNT > 3) {
 
-			System.out.println("????");
+			
 			distanceImg0.setBackgroundResource(drawable.img19);
 
 			distanceImg1.setBackgroundResource(drawable.img19);

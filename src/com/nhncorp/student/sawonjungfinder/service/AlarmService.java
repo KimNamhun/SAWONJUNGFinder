@@ -30,7 +30,7 @@ import com.wizturn.sdk.central.CentralManager;
 import com.wizturn.sdk.peripheral.Peripheral;
 import com.wizturn.sdk.peripheral.PeripheralScanListener;
 
-public class AlarmService extends Service {
+public class AlarmService extends Service implements LocationListener {
 
 	private CentralManager centralManager;
 
@@ -48,6 +48,8 @@ public class AlarmService extends Service {
 
 	int setdistance = 0;
 
+	int locCount = 0;
+
 	// new algorithm variable
 	ArrayList<Double> storedArr = new ArrayList<Double>();
 	ArrayList<Double> dataArr = new ArrayList<Double>();
@@ -59,6 +61,8 @@ public class AlarmService extends Service {
 
 	private LocationManager locationManager;
 	private String provider;
+
+	Location loc;
 
 	private GpsLocationListener listener = null;
 
@@ -97,8 +101,9 @@ public class AlarmService extends Service {
 		@Override
 		public void handleMessage(Message msg) {
 			Constants.NOTIFYCOUNT++;
+			locCount++;
 			mTimerHandler.sendEmptyMessageDelayed(0, 1000);
-			if (Constants.NOTIFYCOUNT > 5) {
+			if (Constants.NOTIFYCOUNT > 3) {
 				if (notificationManager != null) {
 					notificationManager.cancel(0);
 
@@ -687,19 +692,36 @@ public class AlarmService extends Service {
 		}
 
 		if (Constants.DISTANCE > 18 && setAlarm == 1) { // distance 값의 조절이 필요함
-			loadGps();
+			locCount = 0;
+			for (int i = 0; i < 5; i++) {
+				loadGps();
 
-			getgps();
-			notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-			notification = new Notification.Builder(getApplicationContext())
-					.setContentTitle("사원증이 멀어졌습니다.")
-					.setContentText("사원증의 위치를 확인하십시오")
-					.setSmallIcon(R.drawable.alarm_icon)
-					.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
-					.setVibrate(new long[] { 1000, 1000 })
-					.setContentIntent(pendingIntent).build();
-			System.out.println("push===============================alarm");
-			notificationManager.notify(1, notification);
+				getgps();
+			}
+
+			if (loc == null) {
+				notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				notification = new Notification.Builder(getApplicationContext())
+						.setContentTitle("사원증이 멀어졌습니다.")
+						.setContentText("WARNING! 위치 정보가 저장되지 않았습니다.")
+						.setSmallIcon(R.drawable.alarm_icon)
+						.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
+						.setVibrate(new long[] { 1000, 1000 })
+						.setContentIntent(pendingIntent).build();
+				System.out.println("push===============================alarm");
+				notificationManager.notify(1, notification);
+			} else {
+				notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				notification = new Notification.Builder(getApplicationContext())
+						.setContentTitle("사원증이 멀어졌습니다.")
+						.setContentText("위치 정보가 저장되었습니다.")
+						.setSmallIcon(R.drawable.alarm_icon)
+						.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
+						.setVibrate(new long[] { 1000, 1000 })
+						.setContentIntent(pendingIntent).build();
+				System.out.println("push===============================alarm");
+				notificationManager.notify(1, notification);
+			}
 
 			// vibrate setting
 			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -757,13 +779,12 @@ public class AlarmService extends Service {
 				.getColumnIndex("longitude"));
 		Constants.LATITUDE = mCursor.getString(mCursor
 				.getColumnIndex("latitude"));
-		
-		
+
 	}
 
 	public void getgps() {
 
-		Location loc = null;
+		loc = null;
 
 		loc = getLocation();
 
@@ -773,7 +794,6 @@ public class AlarmService extends Service {
 			new Location(loc);
 
 			getData();
-			
 
 			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
 					Constants.DEVICE_ADDRESS, Constants.DEVICE_STATE,
@@ -810,6 +830,30 @@ public class AlarmService extends Service {
 		provider = locationManager.getBestProvider(criteria, true);
 		listener = new GpsLocationListener();
 		locationManager.requestLocationUpdates(provider, 1000, 5, listener);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
