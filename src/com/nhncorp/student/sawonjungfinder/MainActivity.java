@@ -125,14 +125,13 @@ public class MainActivity extends Activity {
 					LayoutInflater inflater = (LayoutInflater) mContext
 							.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-					// R.layout.dialog는 xml 파일명이고 R.id.popup은 보여줄 레이아웃 아이디
 					View layout = inflater.inflate(R.layout.help_message,
 							(ViewGroup) findViewById(R.id.helpMsg));
 					AlertDialog.Builder aDialog = new AlertDialog.Builder(
 							MainActivity.this);
 
 					aDialog.setTitle("도움말"); // 타이틀바 제목
-					aDialog.setView(layout); // dialog.xml 파일을 뷰로 셋팅
+					aDialog.setView(layout);
 
 					// 그냥 닫기버튼을 위한 부분
 					aDialog.setNegativeButton("닫기",
