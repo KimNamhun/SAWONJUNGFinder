@@ -11,7 +11,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,6 +23,7 @@ import android.os.Vibrator;
 
 import com.nhncorp.student.sawonjungfinder.R;
 import com.nhncorp.student.sawonjungfinder.constants.Constants;
+import com.nhncorp.student.sawonjungfinder.database.DbGetSet;
 import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
 import com.wizturn.sdk.central.Central;
 import com.wizturn.sdk.central.CentralManager;
@@ -65,6 +65,8 @@ public class AlarmService extends Service implements LocationListener {
 	Location loc;
 
 	private GpsLocationListener listener = null;
+
+	private DbGetSet dbGetSet;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -118,8 +120,8 @@ public class AlarmService extends Service implements LocationListener {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		setCentralManager();
-		System.out.println("=====================start alarm service========="
-				+ Constants.DEVICE_NAME + "===================");
+		dbGetSet = new DbGetSet(this);
+		System.out.println("=====================start alarm service=========");
 		return START_STICKY;
 	}
 
@@ -134,8 +136,7 @@ public class AlarmService extends Service implements LocationListener {
 	}
 
 	private void setCentralManager() {
-		getData();
-		mDbOpenHelper.close();
+
 		centralManager = CentralManager.getInstance();
 		centralManager.init(getApplicationContext());
 		centralManager.setPeripheralScanListener(new PeripheralScanListener() {
@@ -143,7 +144,7 @@ public class AlarmService extends Service implements LocationListener {
 			public void onPeripheralScan(Central central,
 					final Peripheral peripheral) {
 
-				if (Constants.DEVICE_ADDRESS.equals(peripheral.getBDAddress())) {
+				if (dbGetSet.getMacAddress().equals(peripheral.getBDAddress())) {
 
 					runOnUiThread(new Runnable() {
 						public void run() {
@@ -759,29 +760,6 @@ public class AlarmService extends Service implements LocationListener {
 		}
 	}
 
-	private void getData() {
-		mDbOpenHelper = new DbOpenHelper(this);
-		mDbOpenHelper.open();
-		Cursor mCursor = mDbOpenHelper.getAll();
-		// 모든 row를 받아옴
-		mCursor.moveToFirst();
-		System.out.println(mCursor.getString(mCursor.getColumnIndex("name")));// test
-		System.out.println(mCursor.getString(mCursor
-				.getColumnIndex("macaddress")));// test
-		// 받아온 row의 attribute 값을 variable에 저장
-		Constants.DEVICE_NAME = mCursor.getString(mCursor
-				.getColumnIndex("name"));
-		Constants.DEVICE_ADDRESS = mCursor.getString(mCursor
-				.getColumnIndex("macaddress"));
-		Constants.DEVICE_STATE = mCursor.getString(mCursor
-				.getColumnIndex("devicestate"));
-		Constants.LONGITUDE = mCursor.getString(mCursor
-				.getColumnIndex("longitude"));
-		Constants.LATITUDE = mCursor.getString(mCursor
-				.getColumnIndex("latitude"));
-
-	}
-
 	public void getgps() {
 
 		loc = null;
@@ -792,17 +770,8 @@ public class AlarmService extends Service implements LocationListener {
 
 		} else {
 			new Location(loc);
-
-			getData();
-
-			mDbOpenHelper.updateColumn(1, Constants.DEVICE_NAME,
-					Constants.DEVICE_ADDRESS, Constants.DEVICE_STATE,
-					Double.toString(loc.getLongitude()),
-					Double.toString(loc.getLatitude()));
-			mDbOpenHelper.close();
-			System.out.println(Constants.LATITUDE);
-			System.out.println(Constants.LONGITUDE);
-
+			dbGetSet.setLongitude(Double.toString(loc.getLongitude()));
+			dbGetSet.setLatitude(Double.toString(loc.getLatitude()));
 		}
 
 	}

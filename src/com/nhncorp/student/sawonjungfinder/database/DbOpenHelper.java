@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbOpenHelper {
 	private static final String DATABASE_NAME = "beaconfinder.db";
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 13;
 	public static SQLiteDatabase mDB;
 	private DatabaseHelper mDBHelper;
 	private Context mCtx;

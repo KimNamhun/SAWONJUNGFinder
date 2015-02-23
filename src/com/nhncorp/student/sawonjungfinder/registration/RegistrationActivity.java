@@ -3,7 +3,6 @@ package com.nhncorp.student.sawonjungfinder.registration;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.KeyEvent;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 
 import com.nhncorp.student.sawonjungfinder.MainActivity;
 import com.nhncorp.student.sawonjungfinder.R;
-import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
+import com.nhncorp.student.sawonjungfinder.database.DbGetSet;
 import com.wizturn.sdk.central.Central;
 import com.wizturn.sdk.central.CentralManager;
 import com.wizturn.sdk.peripheral.Peripheral;
@@ -30,12 +29,12 @@ public class RegistrationActivity extends Activity {
 	private Button cardNamingBtn;
 	private EditText cardNamingEdit;
 
-	private DbOpenHelper mDbOpenHelper;
-
 	private boolean loadingState = false;
 	private boolean registrationState = false;
 
 	private Peripheral peripheralValue;
+
+	private DbGetSet dbGetSet;
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
@@ -47,6 +46,7 @@ public class RegistrationActivity extends Activity {
 						MainActivity.class);
 				startActivity(intent);
 				RegistrationActivity.this.finish();
+			default:
 			}
 		}
 		return false;
@@ -63,6 +63,7 @@ public class RegistrationActivity extends Activity {
 	private void init() {
 		getView();
 		setCentralManager(this.getApplicationContext());
+		dbGetSet = new DbGetSet(this);
 		addListener();
 
 	}
@@ -72,22 +73,8 @@ public class RegistrationActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				mDbOpenHelper = new DbOpenHelper(RegistrationActivity.this);
-				mDbOpenHelper.open();
-				mDbOpenHelper.updateColumn(1, cardNamingEdit.getText()
-						.toString(), peripheralValue.getBDAddress(), "0", "0",
-						"0"); // id,
-				// name,
-				// address,
-				// devOnOff
-				// longitude
-				// latitude
-				Cursor mCursor = mDbOpenHelper.getMatchName(cardNamingEdit
-						.getText().toString()); // test
-				mCursor.moveToFirst(); // test
-				System.out.println(mCursor.getString(mCursor
-						.getColumnIndex("name")));// test
-				mDbOpenHelper.close();
+				dbGetSet.setRegistration(cardNamingEdit.getText().toString(),
+						peripheralValue.getBDAddress());
 				Intent intent = new Intent(RegistrationActivity.this,
 						MainActivity.class);
 				startActivity(intent);

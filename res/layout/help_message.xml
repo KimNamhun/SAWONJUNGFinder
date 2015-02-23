@@ -25,7 +25,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_black" />
+            android:background="@drawable/main_cardblack" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/power_black" />
+            android:background="@drawable/main_powerblack" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/finder" />
+            android:background="@drawable/help_finder" />
 
         <TextView
             android:layout_width="wrap_content"
