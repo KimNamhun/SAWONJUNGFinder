@@ -126,24 +126,25 @@ public class AlarmService extends Service implements LocationListener {
 			@Override
 			public void onPeripheralScan(Central central,
 					final Peripheral peripheral) {
+				if (macAddress.equals(peripheral.getBDAddress())) {
+					runOnUiThread(new Runnable() {
+						public void run() {
 
-				runOnUiThread(new Runnable() {
-					public void run() {
-
-						// data를 받은 시간 저장
-						currentTime = formatter.format(new Date());
-						if (currentTime.equals(scaleTime)) {
-							setEqualTime(peripheral);
-						} else {
-							setDifferentTime(peripheral);
-							if (macAddress.equals(peripheral.getBDAddress())) {
-								setNotification(Constants.DISTANCE);
+							// data를 받은 시간 저장
+							currentTime = formatter.format(new Date());
+							if (currentTime.equals(scaleTime)) {
+								setEqualTime(peripheral);
+							} else {
+								setDifferentTime(peripheral);
+								if (macAddress.equals(peripheral.getBDAddress())) {
+									setNotification(Constants.DISTANCE);
+								}
 							}
+
 						}
+					});
 
-					}
-				});
-
+				}
 			}
 
 		});
