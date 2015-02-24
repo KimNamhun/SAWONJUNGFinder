@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.nhncorp.student.sawonjungfinder.bluetooth.BlueToothEnabler;
 import com.nhncorp.student.sawonjungfinder.database.DbGetSet;
+import com.nhncorp.student.sawonjungfinder.finder.FinderActivity;
 import com.nhncorp.student.sawonjungfinder.registration.RegistrationActivity;
 import com.nhncorp.student.sawonjungfinder.service.AlarmService;
 
@@ -86,9 +87,9 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// Intent intent = new Intent(MainActivity.this,
-				// FinderActivity.class);
-				// startActivity(intent);
+				Intent intent = new Intent(MainActivity.this,
+						FinderActivity.class);
+				startActivity(intent);
 
 			}
 		});

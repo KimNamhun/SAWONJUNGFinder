@@ -174,16 +174,16 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 	// Resource Ids for single icons
 	private final ResourceIdsOnMap mResourceIdsForMarkerOnMap[] = {
 			// Spot, Pin icons
-			new ResourceIdsOnMap(NMapPOIflagType.PIN, R.drawable.ic_pin_01,
-					R.drawable.ic_pin_02),
-			new ResourceIdsOnMap(NMapPOIflagType.SPOT, R.drawable.ic_pin_01,
-					R.drawable.ic_pin_02),
+			new ResourceIdsOnMap(NMapPOIflagType.PIN, R.drawable.map_ic_pin_01,
+					R.drawable.map_ic_pin_02),
+			new ResourceIdsOnMap(NMapPOIflagType.SPOT, R.drawable.map_ic_pin_01,
+					R.drawable.map_ic_pin_02),
 
 			// Direction POI icons: From, To
-			new ResourceIdsOnMap(NMapPOIflagType.FROM, R.drawable.ic_map_start,
-					R.drawable.ic_map_start_over),
-			new ResourceIdsOnMap(NMapPOIflagType.TO, R.drawable.ic_map_arrive,
-					R.drawable.ic_map_arrive_over), };
+			new ResourceIdsOnMap(NMapPOIflagType.FROM, R.drawable.map_ic_map_start,
+					R.drawable.map_ic_map_start_over),
+			new ResourceIdsOnMap(NMapPOIflagType.TO, R.drawable.map_ic_map_arrive,
+					R.drawable.map_ic_map_arrive_over), };
 
 	/**
 	 * Find resource id corresponding to the markerId.
@@ -259,9 +259,9 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 		Drawable[] drawable = new Drawable[2];
 
 		drawable[0] = mContext.getResources().getDrawable(
-				R.drawable.pubtrans_ic_mylocation_off);
+				R.drawable.map_pubtrans_ic_mylocation_off);
 		drawable[1] = mContext.getResources().getDrawable(
-				R.drawable.pubtrans_ic_mylocation_on);
+				R.drawable.map_pubtrans_ic_mylocation_on);
 
 		for (int i = 0; i < drawable.length; i++) {
 			int w = drawable[i].getIntrinsicWidth() / 2;
@@ -277,7 +277,7 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 	public Drawable getDirectionArrow() {
 
 		Drawable drawable = mContext.getResources().getDrawable(
-				R.drawable.ic_angle);
+				R.drawable.map_ic_angle);
 
 		if (drawable != null) {
 			int w = drawable.getIntrinsicWidth() / 2;
@@ -337,8 +337,8 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 		if (markerId >= NMapPOIflagType.NUMBER_BASE
 				&& markerId < NMapPOIflagType.NUMBER_END) { // Direction Number
 															// icons
-			int resourceId = (focused) ? R.drawable.ic_map_no_02
-					: R.drawable.ic_map_no_01;
+			int resourceId = (focused) ? R.drawable.map_ic_map_no_02
+					: R.drawable.map_ic_map_no_01;
 			int fontColor = (focused) ? POI_FONT_COLOR_ALPHABET
 					: POI_FONT_COLOR_NUMBER;
 
@@ -410,13 +410,13 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 
 			if (poiItem.showRightButton()) {
 				Drawable drawable = mContext.getResources().getDrawable(
-						R.drawable.bg_speech);
+						R.drawable.map_bg_speech);
 				return drawable;
 			}
 		}
 
 		Drawable drawable = mContext.getResources().getDrawable(
-				R.drawable.pin_ballon_bg);
+				R.drawable.map_pin_ballon_bg);
 
 		return drawable;
 	}
@@ -443,11 +443,11 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 				Drawable[] drawable = new Drawable[3];
 
 				drawable[0] = mContext.getResources().getDrawable(
-						R.drawable.btn_green_normal);
+						R.drawable.map_btn_green_normal);
 				drawable[1] = mContext.getResources().getDrawable(
-						R.drawable.btn_green_pressed);
+						R.drawable.map_btn_green_pressed);
 				drawable[2] = mContext.getResources().getDrawable(
-						R.drawable.btn_green_highlight);
+						R.drawable.map_btn_green_highlight);
 
 				return drawable;
 			}
@@ -468,11 +468,11 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements
 				switch (poiItem.getRightAccessoryId()) {
 				case NMapPOIflagType.CLICKABLE_ARROW:
 					drawable[0] = mContext.getResources().getDrawable(
-							R.drawable.pin_ballon_arrow);
+							R.drawable.map_pin_ballon_arrow);
 					drawable[1] = mContext.getResources().getDrawable(
-							R.drawable.pin_ballon_on_arrow);
+							R.drawable.map_pin_ballon_on_arrow);
 					drawable[2] = mContext.getResources().getDrawable(
-							R.drawable.pin_ballon_on_arrow);
+							R.drawable.map_pin_ballon_on_arrow);
 					break;
 				}
 

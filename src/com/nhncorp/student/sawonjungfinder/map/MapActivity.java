@@ -1,6 +1,5 @@
-/*package com.nhncorp.student.sawonjungfinder.map;
+package com.nhncorp.student.sawonjungfinder.map;
 
-import android.database.Cursor;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -25,7 +24,7 @@ import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay.OnStateChangeListener;
 import com.nhncorp.student.sawonjungfinder.R;
 import com.nhncorp.student.sawonjungfinder.constants.Constants;
-import com.nhncorp.student.sawonjungfinder.database.DbOpenHelper;
+import com.nhncorp.student.sawonjungfinder.database.DbGetSet;
 
 public class MapActivity extends NMapActivity implements
 		OnMapStateChangeListener, OnMapViewTouchEventListener,
@@ -35,13 +34,13 @@ public class MapActivity extends NMapActivity implements
 	NMapController mMapController = null;
 	LinearLayout MapContainer;
 
-	private DbOpenHelper mDbOpenHelper;
-
 	NMapViewerResourceProvider mMapViewerResourceProvider = null;
 	NMapOverlayManager mOverlayManager;
 	OnStateChangeListener onPOIdataStateChangeListener = null;
 
 	NMapPOIdata poiData;
+
+	private DbGetSet dbGetSet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +68,11 @@ public class MapActivity extends NMapActivity implements
 		poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
 		poiData.beginPOIdata(2);
 
-		if (Constants.LONGITUDE.equals("0") && Constants.LATITUDE.equals("0")) {
-			Toast.makeText(this, "아직 잃어버린적이 없어요!!", Toast.LENGTH_LONG).show();
+		dbGetSet = new DbGetSet(this);
+
+		if (dbGetSet.getLongitude().equals("0")
+				&& dbGetSet.getLongitude().equals("0")) {
+			Toast.makeText(this, "위치정보가 없어요", Toast.LENGTH_LONG).show();
 		} else {
 			Toast.makeText(this, "1km이내외의 오차가 있을 수 있습니다.", Toast.LENGTH_LONG)
 					.show();
@@ -137,13 +139,11 @@ public class MapActivity extends NMapActivity implements
 		int markerId = NMapPOIflagType.PIN;
 		if (errorInfo == null) {
 
-			getData();
-
 			mMapController.setMapCenter(
-					new NGeoPoint(Double.parseDouble(Constants.LONGITUDE),
-							Double.parseDouble(Constants.LATITUDE)), 7);
-			poiData.addPOIitem(Double.parseDouble(Constants.LONGITUDE),
-					Double.parseDouble(Constants.LATITUDE),
+					new NGeoPoint(Double.parseDouble(dbGetSet.getLongitude()),
+							Double.parseDouble(dbGetSet.getLatitude())), 7);
+			poiData.addPOIitem(Double.parseDouble(dbGetSet.getLongitude()),
+					Double.parseDouble(dbGetSet.getLatitude()),
 					"이 구역에서 없어졌을 가능성이 높아요!", markerId, 0);
 			poiData.endPOIdata();
 
@@ -171,28 +171,4 @@ public class MapActivity extends NMapActivity implements
 		return null;
 	}
 
-	private void getData() {
-		mDbOpenHelper = new DbOpenHelper(this);
-		mDbOpenHelper.open();
-		Cursor mCursor = mDbOpenHelper.getAll();
-		// 모든 row를 받아옴
-		mCursor.moveToFirst();
-		System.out.println(mCursor.getString(mCursor.getColumnIndex("name")));// test
-		System.out.println(mCursor.getString(mCursor
-				.getColumnIndex("macaddress")));// test
-		// 받아온 row의 attribute 값을 variable에 저장
-		Constants.DEVICE_NAME = mCursor.getString(mCursor
-				.getColumnIndex("name"));
-		Constants.DEVICE_ADDRESS = mCursor.getString(mCursor
-				.getColumnIndex("macaddress"));
-		Constants.DEVICE_STATE = mCursor.getString(mCursor
-				.getColumnIndex("devicestate"));
-		Constants.LONGITUDE = mCursor.getString(mCursor
-				.getColumnIndex("longitude"));
-		Constants.LATITUDE = mCursor.getString(mCursor
-				.getColumnIndex("latitude"));
-		mDbOpenHelper.close();
-	}
-
 }
-*/

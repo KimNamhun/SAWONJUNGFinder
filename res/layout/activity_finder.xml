@@ -5,157 +5,13 @@
     android:background="#000000"
     android:orientation="horizontal" >
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/distanceImg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#000000"
-        android:orientation="vertical" >
-
-        <ImageView
-            android:id="@+id/distanceImg0"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg6"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg7"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg8"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg9"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg10"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg11"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg12"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg13"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg14"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg15"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg16"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img19"
-            android:contentDescription="signal power" />
-
-        <ImageView
-            android:id="@+id/distanceImg17"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/img17"
-            android:contentDescription="signal power" />
-    </LinearLayout>
+        android:background="@drawable/finder_distance31"
+        android:contentDescription="signal power" />
 
     <ImageView
         android:id="@+id/distanceData"
@@ -170,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/distanceData"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/finder_message2" />
 
     <ImageButton
         android:id="@+id/mapBtn"
@@ -178,7 +35,7 @@
         android:layout_height="wrap_content"
         android:background="#00000000"
         android:contentDescription="map OnOff Button"
-        android:src="@drawable/map_icon" >
+        android:src="@drawable/finder_map_icon" >
     </ImageButton>
 
 </RelativeLayout>
