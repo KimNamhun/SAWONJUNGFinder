@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -59,14 +57,10 @@ public class AlarmService extends Service implements LocationListener {
 	private LocationManager locationManager;
 	private String provider;
 
-	private Location loc;
+	private Location loc = null;
 	private GpsLocationListener listener = null;
 
 	private DbGetSet dbGetSet;
-
-	// 위치를 받기 위한 타이머
-	TimerTask myTask;
-	Timer timer;
 
 	private String macAddress;
 
@@ -273,56 +267,13 @@ public class AlarmService extends Service implements LocationListener {
 
 	private void setNotification(double distance) {
 
-		Intent intent = new Intent(
-				"com.nhncorp.student.sawonjungfinder.service");
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-				intent, 0);
-
 		if (Constants.DISTANCE < 10 && Constants.DISTANCE > 3) {
 			setAlarm = 1;
 		}
 
-		if (Constants.DISTANCE > 18 && setAlarm == 1) {
-
-			myTask = new TimerTask() {
-				public void run() {
-					loadGps();
-					getgps();
-
-				}
-			};
-			timer = new Timer();
-			timer.schedule(myTask, 0, 1000); // 0초후 첫실행, 1초마다 계속실행
-
-			if (loc == null) {
-				notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				notification = new Notification.Builder(getApplicationContext())
-						.setContentTitle("사원증이 멀어졌습니다.")
-						.setContentText("WARNING! 위치 정보가 저장되지 않았습니다.")
-						.setSmallIcon(R.drawable.alarm_icon)
-						.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
-						.setVibrate(new long[] { 1000, 1000 })
-						.setContentIntent(pendingIntent).build();
-				System.out.println("push===============================alarm");
-				notificationManager.notify(1, notification);
-			} else {
-				notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				notification = new Notification.Builder(getApplicationContext())
-						.setContentTitle("사원증이 멀어졌습니다.")
-						.setContentText("위치 정보가 저장되었습니다.")
-						.setSmallIcon(R.drawable.alarm_icon)
-						.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
-						.setVibrate(new long[] { 1000, 1000 })
-						.setContentIntent(pendingIntent).build();
-				System.out.println("push===============================alarm");
-				notificationManager.notify(1, notification);
-			}
-
-			// vibrate setting
-			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			vibrator.vibrate(1000);
-			setAlarm = 0;
-			setdistance = 1;
+		if (Constants.DISTANCE > 15 && setAlarm == 1) {
+			loadGps();
+			getgps();
 		}
 
 		if (setdistance == 1 && Constants.DISTANCE < 10
@@ -352,15 +303,13 @@ public class AlarmService extends Service implements LocationListener {
 
 	public void getgps() {
 
-		loc = null;
-
 		loc = getLocation();
+		locationManager.removeUpdates(listener);
 
 		if (loc == null) {
-
+			setDistanceNullNotify();
 		} else {
-			timer.cancel();
-			myTask.cancel();
+			setDistanceNotNullNotify();
 			new Location(loc);
 			dbGetSet.setLongitude(Double.toString(loc.getLongitude()));
 			dbGetSet.setLatitude(Double.toString(loc.getLatitude()));
@@ -368,13 +317,62 @@ public class AlarmService extends Service implements LocationListener {
 
 	}
 
+	public void setDistanceNullNotify() {
+		Intent intent = new Intent(
+				"com.nhncorp.student.sawonjungfinder.service");
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+				intent, 0);
+		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		notification = new Notification.Builder(getApplicationContext())
+				.setContentTitle("사원증이 멀어졌습니다.")
+				.setContentText("WARNING! 위치 정보가 저장되지 않았습니다.")
+				.setSmallIcon(R.drawable.alarm_icon)
+				.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
+				.setVibrate(new long[] { 1000, 1000 })
+				.setContentIntent(pendingIntent).build();
+		System.out.println("push===============================alarm");
+		notificationManager.notify(1, notification);
+		Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(1000);
+		setAlarm = 0;
+		setdistance = 1;
+
+	}
+
+	public void setDistanceNotNullNotify() {
+		Intent intent = new Intent(
+				"com.nhncorp.student.sawonjungfinder.service");
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+				intent, 0);
+		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		notification = new Notification.Builder(getApplicationContext())
+				.setContentTitle("사원증이 멀어졌습니다.")
+				.setContentText("위치 정보가 저장되었습니다.")
+				.setSmallIcon(R.drawable.alarm_icon)
+				.setTicker("사원증을 가지고 계십니까?").setAutoCancel(true)
+				.setVibrate(new long[] { 1000, 1000 })
+				.setContentIntent(pendingIntent).build();
+		System.out.println("push===============================alarm");
+		notificationManager.notify(1, notification);
+		Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(1000);
+		setAlarm = 0;
+		setdistance = 1;
+	}
+
 	private Location getLocation() {
 
 		Location location = locationManager.getLastKnownLocation(provider);
+
 		if (location == null) {
+			System.out
+					.println("NETWORK+++++++++++++++++++++++++++++++++++++++++");
+
 			location = locationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
 		}
+
 		return location;
 	}
 
@@ -390,7 +388,17 @@ public class AlarmService extends Service implements LocationListener {
 		criteria.setCostAllowed(true); // 위치 정보를 얻어 오는데 들어가는 금전적 비용
 		provider = locationManager.getBestProvider(criteria, true);
 		listener = new GpsLocationListener();
-		locationManager.requestLocationUpdates(provider, 1000, 5, listener);
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			System.out.println("GPS+++++++++++++++++++++++++++++++++++++++++");
+			locationManager.requestLocationUpdates(provider, 1000, 5, listener);
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	@Override

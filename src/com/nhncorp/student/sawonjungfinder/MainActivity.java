@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
 			if (dbGetSet.getDeviceState().equals("0")) {
 				dbGetSet.setDeviceState("1");
 				devOnOffBtn.setImageResource(R.drawable.main_powerorange);
+				showSettingsAlert();
 				setService(1); // start
 			} else if (dbGetSet.getDeviceState().equals("1")) {
 				dbGetSet.setDeviceState("0");
@@ -165,5 +167,32 @@ public class MainActivity extends Activity {
 		} else if (i == 1) { // start
 			startService(intent);
 		}
+	}
+
+	public void showSettingsAlert() {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+		alertDialog.setTitle("알람기능 셋팅완료");
+		alertDialog
+				.setMessage("추가적으로 로그기능 사용을 위해서는 위치를 활성화해야합니다\n위치를 활성화 하시겠습니까?");
+
+		// OK 를 누르게 되면 설정창으로 이동합니다.
+		alertDialog.setPositiveButton("Settings",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(
+								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+						MainActivity.this.startActivity(intent);
+					}
+				});
+		// Cancel하면 종료 합니다.
+		alertDialog.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+
+		alertDialog.show();
 	}
 }
